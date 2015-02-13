@@ -10,11 +10,13 @@
 * AI
 * Game Logic/Loop
 * Discard Pile Object
+
 ### Needed
 * Stats
 * Round End Button
 * Game End Options
 * Special Cards
+
 ### Extra
 * Cat Meme Cards
 * Card Dragging
