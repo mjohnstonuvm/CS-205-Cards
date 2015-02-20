@@ -3,8 +3,15 @@
 ## Task List
 
 ### Essential
-* Deck Object
-* Hand Object
+* Deck Object - Queue or Stack 54 cards
+    * Four of each number card that says 0-8
+    * Nine of number card "nine"
+    * Power cards
+    * 3 "Draw 2"s
+    * 3 "Peek"s
+    * 3 "Swap"s   
+* Hand Object 
+    * Array of 4 cards  
 * Card Object
 * GUI
 * AI
