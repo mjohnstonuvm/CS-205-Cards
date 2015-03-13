@@ -1,21 +1,45 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ Created by Matt Johnston
  */
 package card;
 
-/**
- *
- * @author Sir
- */
+/*
+ Card class that has a type and a number associated with it
+*/
 public class Card {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    //enum of type and number
+    public enum Type {DRAW2,PEEK,SWAP,NUMBER}
+
+    class CardObject{
+        Type type;
+        
+        public CardObject(Type type){
+        this.type = type;
+        }
+        
+    //will return card obejct
+    public void getType(){
+        
+        switch(type){
+            
+            case DRAW2:
+                break;
+            case PEEK:
+                break;
+            case SWAP:
+                break;
+            case NUMBER:
+        }
+    }
+    
+    //will return card obejct
+    public void getNumber(){
+        
+    }
+    }
+    public static void main(String[]args){
+        
     }
     
 }
