@@ -1,11 +1,14 @@
 /*
- Created by Matt Johnston
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package card;
 
-/*
-Gui class displays the gui and connects the game to a clean UI
-*/
+/**
+ *
+ * @author Sir
+ */
 public class Gui {
     
 }
