@@ -17,7 +17,7 @@ public class CardObject {
     /*
      Card class gets the type and the number
      */
-    private static class Card {
+    static class Card {
 
         private final Type type;
         private int number = -1; //number is default -1 if type is not a number
@@ -51,22 +51,13 @@ public class CardObject {
         public int getNumber() {
             return this.number;
         }
+
+        @Override
+        public String toString() {
+            if(number != -1){
+            return " type = " + type + ", number = " + number;
+            }
+            return " type = " + type;
+        }
     }
-
-    public static void main(String[] args) {
-        Card c = new Card(2);
-        Card x = new Card(Type.DRAW2);
-        Card d = new Card(8);
-        Card e = new Card(Type.PEEK);
-        Card f = new Card(Type.SWAP);
-        
-        System.out.println("Card # = " + c.getNumber() + " Type = " + c.getType());
-        System.out.println("Card # = " + x.getNumber() + " Type = " + x.getType());
-        System.out.println("Card # = " + d.getNumber() + " Type = " + d.getType());
-        System.out.println("Card # = " + e.getNumber() + " Type = " + e.getType());
-        System.out.println("Card # = " + f.getNumber() + " Type = " + f.getType());
-        
-
-    }
-
 }
