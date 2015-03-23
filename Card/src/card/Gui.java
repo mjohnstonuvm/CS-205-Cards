@@ -3,40 +3,31 @@
  */
 package card;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import java.awt.event.*;
+import javax.swing.*;
 
 /**
  * Gui class to represent card game as a UI
  */
-public class Gui extends Application {
-
-    @Override
-    public void start(Stage stage) {
-        stage.setTitle("Rat-A-Tat CAT!");
-        Button btn = new Button();
-        btn.setText("Start Game");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Start");
-            }
-        });
-
-        StackPane root = new StackPane();
-        //root.getChildren().add(btn);
-        stage.setScene(new Scene(root, 1440, 900));
-        stage.setResizable(false);
-        stage.show();
+public class Gui extends JFrame implements ActionListener {
+    
+    /*
+    Constructor to set window
+    */
+    public Gui() {
+        super.setTitle("Rat-A-Tat CAT");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
-        launch(args);
+        new Gui();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
