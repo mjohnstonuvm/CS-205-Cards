@@ -17,7 +17,7 @@ public class CardObject {
     /*
      Card class gets the type and the number
      */
-    static class Card {
+    protected static class Card {
 
         private final Type type;
         private int number = -1; //number is default -1 if type is not a number
