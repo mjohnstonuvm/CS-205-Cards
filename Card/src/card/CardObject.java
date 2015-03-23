@@ -55,7 +55,7 @@ public class CardObject {
         @Override
         public String toString() {
             if(number != -1){
-            return " type = " + type + ", number = " + number;
+            return " type = " + type + ", Number = " + number;
             }
             return " type = " + type;
         }
