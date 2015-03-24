@@ -1,3 +1,6 @@
+/*
+ Created by Zach Clay-Dolan
+ */
 package card;
 
 public class HandObject extends CardObject{
@@ -6,7 +9,9 @@ public class HandObject extends CardObject{
 
         private final Card[] cards = new Card[4];
 
-        //constructor for the Hand
+        /*
+        constructor for the Hand
+        */
         public Hand(Card card1, Card card2, Card card3, Card card4) {
             this.cards[0] = card1;
             this.cards[1] = card2;
@@ -14,19 +19,25 @@ public class HandObject extends CardObject{
             this.cards[3] = card4;
         }
 
-        //allows you to peek at a card 
+        /*
+        allows you to peek at a card 
+        */
         public Card peek(int index) {
             return this.cards[index];
         }
 
-        //allows to swap a card NOTE: index is offset by 1
+        /*
+        allows to swap a card NOTE: index is offset by 1
+        */
         public Card swap(Card newCard, int index) {
             Card temp = this.cards[index];
             this.cards[index] = newCard;
             return temp;
         }
 
-        //Totals up the card values after replacing all power cards
+        /*
+        Totals up the card values after replacing all power cards
+        */
         public int total() {
             this.replacePowerCards();
             int total = this.cards[0].getNumber();
@@ -36,7 +47,9 @@ public class HandObject extends CardObject{
             return total;
         }
 
-        //Replaces all power cards until number cards
+        /*
+        Replaces all power cards until number cards
+        */
         public void replacePowerCards() {
             for (int i = 0; i < 4; i++) {
                 while (this.cards[i].getType() != Type.NUMBER) {
