@@ -31,7 +31,7 @@ public class Gui extends JFrame implements ActionListener {
     private JFrame getStartMenu() {
         final JFrame startFrame = new JFrame();
         startFrame.setLayout(null);
-
+        
         //Title of game
         JLabel title = new JLabel("Rat-a-Tat Cat");
         title.setForeground(Color.blue.darker());
