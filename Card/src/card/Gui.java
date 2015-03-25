@@ -8,7 +8,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * Gui class to represent card game as a UI
+ * Class to represent card game as a UI
  */
 public class Gui extends JFrame implements ActionListener {
 
