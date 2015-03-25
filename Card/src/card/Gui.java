@@ -50,17 +50,21 @@ public class Gui extends JFrame implements ActionListener {
         startFrame.add(title);
         startFrame.add(title2);
         howToPlayButton.setBounds(200, 450, 200, 50);
+        howToPlayButton.addActionListener((ActionEvent sb) -> {
+            System.out.println("Help");
+        });
         startFrame.add(howToPlayButton);
         startButton.setBounds(200, 520, 200, 50);
+        startButton.addActionListener((ActionEvent sb) -> {
+            System.out.println("Start Game");
+        });
         startFrame.add(startButton);
         soundButton.setBounds(550, 610, 50, 50);
-        soundButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent sb) {
-                if (soundButton.getText().equals("ON")) {
-                    soundButton.setText("OFF");
-                } else {
-                    soundButton.setText("ON");
-                }
+        soundButton.addActionListener((ActionEvent sb) -> {
+            if (soundButton.getText().equals("ON")) {
+                soundButton.setText("OFF");
+            } else {
+                soundButton.setText("ON");
             }
         });
         startFrame.add(soundButton);
