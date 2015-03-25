@@ -3,6 +3,7 @@
  */
 package card;
 
+import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -30,15 +31,40 @@ public class Gui extends JFrame implements ActionListener {
     private JFrame getStartMenu() {
         final JFrame startFrame = new JFrame();
         startFrame.setLayout(null);
+
+        //Title of game
+        JLabel title = new JLabel("Rat-a-Tat Cat");
+        title.setForeground(Color.blue.darker());
+        title.setBounds(60, 0, 500, 60);
+        title.setFont(title.getFont().deriveFont(64.0f));
+
+        //start menu title
+        JLabel title2 = new JLabel("Start Menu");
+        title2.setForeground(Color.blue.darker());
+        title2.setBounds(170, 70, 300, 60);
+        title2.setFont(title2.getFont().deriveFont(40.0f));
+
+        //title of window
         startFrame.setTitle("Start Menu");
         startFrame.setBounds(400, 80, 610, 700);
-        
+        startFrame.add(title);
+        startFrame.add(title2);
         howToPlayButton.setBounds(200, 450, 200, 50);
         startFrame.add(howToPlayButton);
         startButton.setBounds(200, 520, 200, 50);
         startFrame.add(startButton);
         soundButton.setBounds(550, 610, 50, 50);
+        soundButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent sb) {
+                if (soundButton.getText().equals("ON")) {
+                    soundButton.setText("OFF");
+                } else {
+                    soundButton.setText("ON");
+                }
+            }
+        });
         startFrame.add(soundButton);
+
         startFrame.setAlwaysOnTop(true);
         startFrame.setResizable(false);
         startFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
