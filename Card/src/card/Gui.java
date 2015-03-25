@@ -10,12 +10,12 @@ import javax.swing.*;
 /**
  * Class to represent card game as a UI
  */
-public class Gui extends JFrame implements ActionListener {
+public class Gui extends JFrame{
 
     //Buttons
     private JButton startButton = new JButton("Start Game");
     private JButton howToPlayButton = new JButton("How to Play");
-    private JButton soundButton = new JButton("ON");
+    private JToggleButton soundButton = new JToggleButton("ON");
     /*
      Constructor to set window
      */
@@ -31,7 +31,7 @@ public class Gui extends JFrame implements ActionListener {
     private JFrame getStartMenu() {
         final JFrame startFrame = new JFrame();
         startFrame.setLayout(null);
-        
+
         //Title of game
         JLabel title = new JLabel("Rat-a-Tat Cat");
         title.setForeground(Color.blue.darker());
@@ -41,7 +41,7 @@ public class Gui extends JFrame implements ActionListener {
         //start menu title
         JLabel title2 = new JLabel("Start Menu");
         title2.setForeground(Color.blue.darker());
-        title2.setBounds(170, 70, 300, 60);
+        title2.setBounds(170, 120, 300, 60);
         title2.setFont(title2.getFont().deriveFont(40.0f));
 
         //title of window
@@ -69,6 +69,43 @@ public class Gui extends JFrame implements ActionListener {
         });
         startFrame.add(soundButton);
 
+        //num of opponents combo box
+        String[] numOp = {"1", "2", "3"};
+        JComboBox op = new JComboBox(numOp);
+        op.setBounds(200, 390, 200, 50);
+        op.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ops) {
+                System.out.println(op.getSelectedItem());
+            }
+        });
+        startFrame.add(op);
+
+        //dfficulty combobox
+        String[] diff = {"Easy", "Medium", "Hard"};
+        JComboBox difficulty = new JComboBox(diff);
+        difficulty.setBounds(200, 350, 200, 50);
+        difficulty.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent d) {
+                System.out.println(difficulty.getSelectedItem());
+            }
+        });
+        startFrame.add(difficulty);
+              
+        //End game options
+        JPanel panel = new JPanel();
+        panel.setBounds(180, 220, 200, 200);
+        JRadioButton roundNum = new JRadioButton("Number of Rounds",true);
+        JRadioButton time   = new JRadioButton("Time");
+        JRadioButton numPoints = new JRadioButton("Number of points");
+        ButtonGroup group = new ButtonGroup();
+        group.add(roundNum);
+        group.add(time);
+        group.add(numPoints);
+        panel.add(roundNum);
+        panel.add(time);
+        panel.add(numPoints);
+        startFrame.add(panel);
+        
         startFrame.setAlwaysOnTop(true);
         startFrame.setResizable(false);
         startFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -80,9 +117,5 @@ public class Gui extends JFrame implements ActionListener {
         new Gui();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }
