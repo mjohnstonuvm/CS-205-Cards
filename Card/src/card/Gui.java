@@ -35,7 +35,7 @@ public class Gui extends JFrame{
         //Title of game
         JLabel title = new JLabel("Rat-a-Tat Cat");
         title.setForeground(Color.blue.darker());
-        title.setBounds(60, 0, 500, 60);
+        title.setBounds(80, 50, 500, 60);
         title.setFont(title.getFont().deriveFont(64.0f));
 
         //start menu title
@@ -57,6 +57,7 @@ public class Gui extends JFrame{
         startButton.setBounds(200, 520, 200, 50);
         startButton.addActionListener((ActionEvent sb) -> {
             System.out.println("Start Game");
+            startFrame.setVisible(false);
         });
         startFrame.add(startButton);
         soundButton.setBounds(550, 610, 50, 50);

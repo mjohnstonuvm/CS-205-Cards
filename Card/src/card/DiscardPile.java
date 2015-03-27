@@ -8,7 +8,7 @@ import java.util.*;
 /*
 Discard Pile Object implemented using a stack
 */
-public class DiscardPile extends CardObject{
+public class DiscardPile extends CardObject {
 
    /*
     creating the stack
