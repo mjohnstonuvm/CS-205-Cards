@@ -3,13 +3,13 @@
 ## Task List
 
 ### Essential
-* Deck Object
-* Hand Object
-* Card Object
+* Deck Object (Keegan)
+* Hand Object (Matt)
+* Card Object (My Mai)
+* Discard Pile Object (Zach)
 * GUI
 * AI
 * Game Logic/Loop
-* Discard Pile Object
 
 ### Needed
 * Stats
