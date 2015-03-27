@@ -3,6 +3,7 @@
 ## Task List
 
 ### Essential
+
 * Deck Object - Queue or Stack 54 cards
     * Four of each number card that says 0-8
     * Nine of number card "nine"
@@ -13,10 +14,15 @@
 * Hand Object 
     * Array of 4 cards  
 * Card Object
+=======
+* Deck Object (Keegan)
+* Hand Object (Matt)
+* Card Object (My Mai)
+* Discard Pile Object (Zach)
+
 * GUI
 * AI
 * Game Logic/Loop
-* Discard Pile Object
 
 ### Needed
 * Stats
