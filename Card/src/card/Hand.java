@@ -3,9 +3,7 @@
  */
 package card;
 
-public class HandObject extends CardObject{
-
-    private static class Hand {
+public class Hand extends CardObject{
 
         private final Card[] cards = new Card[4];
 
@@ -80,4 +78,4 @@ public class HandObject extends CardObject{
         }
 
     }
-}
+
