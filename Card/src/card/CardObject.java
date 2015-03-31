@@ -59,5 +59,6 @@ public class CardObject {
             }
             return " type = " + type;
         }
+        
     }
 }
