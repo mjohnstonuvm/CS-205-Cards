@@ -1,11 +1,9 @@
 /*
- Created by Zach Clay-Dolan
+ Created by Zach Chay-Dolan
  */
 package card;
 
 public class HandObject extends CardObject{
-
-    private static class Hand {
 
         private final Card[] cards = new Card[4];
 
@@ -79,5 +77,4 @@ public class HandObject extends CardObject{
 
         }
 
-    }
 }
