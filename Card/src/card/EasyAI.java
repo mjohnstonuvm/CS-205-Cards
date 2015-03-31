@@ -5,13 +5,12 @@ import java.util.Random;
 
 public class EasyAI extends CardObject {
 
-    public static int numPlayers;
-    DiscardPile d;
+    private final int numPlayers;
+
     public static Random rand;
 
-    public EasyAI(int players, DiscardPile discard) {
+    public EasyAI(int players) {
         numPlayers = players;
-        d = discard;
     }
 
     public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
@@ -27,7 +26,7 @@ public class EasyAI extends CardObject {
         }
     }
 
-    public static int[] CardDraw(Card drawnCard) {
+    public int[] CardDraw(Card drawnCard) {
         rand = new Random();
         int[] a = {};
         if (drawnCard.getType() == Type.NUMBER) {
@@ -41,7 +40,7 @@ public class EasyAI extends CardObject {
             return a;
         } else if (drawnCard.getType() == Type.SWAP) {
             int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
-            a = new int[]{c, rand.nextInt(4), rand.nextInt(numPlayers - 1 * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
+            a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             return a;
         }
         return a;
@@ -49,16 +48,19 @@ public class EasyAI extends CardObject {
     }
 
     public static void main(String[] args) {
+        EasyAI a = new EasyAI(3);
         //WORKS
-        Card c = new Card(Type.NUMBER);
-        System.out.println(Arrays.toString(CardDraw(c)));
+        Card c = new Card(9);
+        System.out.println(Arrays.toString(a.CardDraw(c)));
+        System.out.println(a.DrawOrDiscard(c));
         
         //doesnt work
         Card d = new Card(Type.PEEK);
-        System.out.println(Arrays.toString(CardDraw(d)));
-        
+        System.out.println(Arrays.toString(a.CardDraw(d)));
+        System.out.println(a.DrawOrDiscard(d));
         //doesnt work
         Card e = new Card(Type.SWAP);
-        System.out.println(Arrays.toString(CardDraw(e)));
+        System.out.println(Arrays.toString(a.CardDraw(e)));
+        System.out.println(a.DrawOrDiscard(e));
     }
 }
