@@ -58,13 +58,19 @@ public class CardObject {
         public String getCard() {
             String path;
             if (type == Type.NUMBER) {
-                path = this.type.toString().concat(Integer.toString(this.number)) + ".jpg";
+                path = Integer.toString(this.number) + ".png";
             } else {
-                path = this.type.toString() + ".jpg";
+                path = this.type.toString() + ".png";
             }
             return path;
         }
-
+        /*
+        sets the file path of the card
+        */
+        public void setPath(){
+            
+        }
+        
         @Override
         public String toString() {
             if (number != -1) {
