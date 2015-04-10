@@ -9,13 +9,14 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import javafx.scene.layout.Border;
 import javax.swing.*;
 
 /**
  * Class to represent card game as a UI
  */
 public class Gui extends JFrame {
-
+    PlayClip c = new PlayClip("hp.au");
     /*
      Constructor to set window
      */
@@ -69,8 +70,10 @@ public class Gui extends JFrame {
         soundButton.addActionListener((ActionEvent sb) -> {
             if (soundButton.getText().equals("ON")) {
                 soundButton.setText("OFF");
+                c.stop();
             } else {
                 soundButton.setText("ON");
+                c.play();
             }
         });
         startFrame.add(soundButton);
@@ -126,9 +129,10 @@ public class Gui extends JFrame {
         } catch (FileNotFoundException e) {
             e.getMessage();
         }
-        final JFrame frame = new JFrame();
+        JFrame frame = new JFrame();
         frame.setTitle("How To Play");
         frame.setBounds(400, 80, 610, 700);
+        frame.setBackground(Color.gray.darker().darker());
         frame.setLayout(new BorderLayout());
         frame.setAlwaysOnTop(true);
         JPanel panel = new JPanel();

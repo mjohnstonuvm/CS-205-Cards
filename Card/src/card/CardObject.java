@@ -38,24 +38,43 @@ public class CardObject {
         }
 
         /*
-        Returns type of card
-        */
+         Returns type of card
+         */
         public Type getType() {
             return this.type;
         }
 
         /*
-        Returns number with the card
-        -1 if the Type != NUMBER
-        */
+         Returns number with the card
+         -1 if the Type != NUMBER
+         */
         public int getNumber() {
             return this.number;
         }
 
+        /*
+         Returns card from the string image file
+         */
+        public String getCard() {
+            String path;
+            if (type == Type.NUMBER) {
+                path = Integer.toString(this.number) + ".png";
+            } else {
+                path = this.type.toString() + ".png";
+            }
+            return path;
+        }
+        /*
+        sets the file path of the card
+        */
+        public void setPath(){
+            
+        }
+        
         @Override
         public String toString() {
-            if(number != -1){
-            return " type = " + type + ", Number = " + number;
+            if (number != -1) {
+                return " type = " + type + ", Number = " + number;
             }
             return " type = " + type;
         }
