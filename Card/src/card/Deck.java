@@ -9,7 +9,7 @@ public class Deck extends CardObject {
 	public Deck() {
 		int i = 0;
 		// Create normal cards
-		for (int j = 0; j < 9; j++) {
+		for (int j = 1; j <= 9; j++) {
 			deck[i] = new Card(j);
 			deck[i + 1] = new Card(j);
 			deck[i + 2] = new Card(j);
