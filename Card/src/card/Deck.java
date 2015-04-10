@@ -1,69 +1,67 @@
 package card;
-
 import java.util.Random;
 
 public class Deck extends CardObject {
 
-    private Card[] deck = new Card[54];
-    private int lastCard = 0;
+	protected CardObject.Card[] deck = new CardObject.Card[54];
+	public int lastCard = 53;
+	public final int length = deck.length;
 
-    public Deck() {
-        int i = 0;
-        // Create normal cards
-        for (int j = 0; j < 9; j++) {
-            deck[i] = new Card(j);
-            deck[i + 1] = new Card(j);
-            deck[i + 2] = new Card(j);
-            deck[i + 3] = new Card(j);
-            i += 4;
-        }
-        // Create 9 cards of value 9
-        for (int j = i; i < j + 9; i++) {
-            deck[i] = new Card(9);
-        }
-        
-        for (int j = 0; j < 3; j++) {
-            deck[i] = new Card(Type.DRAW2);
-            deck[i + 1] = new Card(Type.PEEK);
-            deck[i + 2] = new Card(Type.SWAP);
-            i += 3;
-        }
+	public Deck() {
+		int i = 0;
+		// Create normal cards
+		for (int j = 1; j <= 9; j++) {
+			deck[i] = new CardObject.Card(j);
+			deck[i + 1] = new CardObject.Card(j);
+			deck[i + 2] = new CardObject.Card(j);
+			deck[i + 3] = new CardObject.Card(j);
+			i += 4;
+		}
+		// Create 9 cards of value 9
+		for (int j = i; i < j + 9; i++) {
+			deck[i] = new CardObject.Card(9);
+		}
+		for (int j = 0; j < 3 ; j++) {
+			deck[i] = new CardObject.Card(CardObject.Type.DRAW2);
+			deck[i + 1] = new CardObject.Card(CardObject.Type.PEEK);
+			deck[i + 2] = new CardObject.Card(CardObject.Type.SWAP);
+			i += 3;
+		}
 
-        shuffle();
-    }
+		shuffle();
+	}
 
-    public Card pop() {
-        Card returnCard = null;
+	public CardObject.Card pop() {
+		CardObject.Card returnCard = null;
 
-        if (lastCard < deck.length) {
-            returnCard = deck[lastCard];
-            lastCard++;
-        }
+		if (lastCard < deck.length) {
+			returnCard = deck[lastCard];
+			deck[lastCard] = null;
+			lastCard--;
+		}
+		
+		return returnCard;
 
-        return returnCard;
+	}
 
-    }
+	public void push(CardObject.Card returnedCard) {
+		if (lastCard < 53 && lastCard > -2) {
+			lastCard++;
+			deck[lastCard] = returnedCard;
+		}
+		else {
+			System.out.println("Deck Push: card couldn't not be added, out of bounds.");
+		}
+	}
 
-    private void shuffle() {
-        Random rand = new Random();
-        for (int i = 0; i < deck.length; i++) {
-            int j = rand.nextInt(54);
-            Card temp = deck[j];
-            deck[j] = deck[i];
-            deck[i] = temp;
-        }
-    }
-
-    public static void main(String[] args) {
-        Deck test = new Deck();
-        for (int i = 0; i < 54; i++) {
-            Card card = test.pop();
-            if (card != null) {
-                System.out.println("Card " + String.valueOf(i) + ": " + card.toString());
-            } else {
-                System.out.println("NULLLLLLLL");
-            }
-        }
-    }
+	protected void shuffle() {
+		Random rand = new Random();
+		for (int i = 0; i < lastCard; i++) {
+			int j = rand.nextInt(lastCard + 1);
+			CardObject.Card temp = deck[j];
+			deck[j] = deck[i];
+			deck[i] = temp;
+		}
+	}
 
 }// End of Deck Class
