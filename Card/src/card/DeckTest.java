@@ -15,19 +15,13 @@ public class DeckTest extends CardObject {
 		deck.push(pushed);
 		deck.push(pushed);
 
-		System.out.println(String.valueOf(deck.lastCard));
-		
 		Card card = deck.pop();
 		if(card != null) System.out.println("Pushed Card " + card.toString());
 		else System.out.println("NULLLLLLLL");
 
-		System.out.println(String.valueOf(deck.lastCard));
-
 		card = deck.pop();
 		if(card != null) System.out.println("Pushed Card " + card.toString());
-		else System.out.println("NULLLLLLLL");
-
-		System.out.println(String.valueOf(deck.lastCard));		
+		else System.out.println("NULLLLLLLL");	
 
 	}
 
