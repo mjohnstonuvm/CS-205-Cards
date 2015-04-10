@@ -3,7 +3,7 @@ import java.util.Random;
 public class Deck extends CardObject {
 
 	protected Card[] deck = new Card[54];
-	public int lastCard = 53;
+	protected int lastCard = 53;
 	public final int length = deck.length;
 
 	public Deck() {
