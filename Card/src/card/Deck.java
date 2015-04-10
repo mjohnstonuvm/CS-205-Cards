@@ -1,10 +1,10 @@
 package card;
-
 import java.util.Random;
 public class Deck extends CardObject {
 
-	private Card[] deck = new Card[54];
-	private int lastCard = 0;
+	protected Card[] deck = new Card[54];
+	public int lastCard = 53;
+	public final int length = deck.length;
 
 	public Deck() {
 		int i = 0;
@@ -35,29 +35,31 @@ public class Deck extends CardObject {
 
 		if (lastCard < deck.length) {
 			returnCard = deck[lastCard];
-			lastCard++;
+			deck[lastCard] = null;
+			lastCard--;
 		}
 		
 		return returnCard;
 
 	}
 
-	private void shuffle() {
-		Random rand = new Random();
-		for (int i = 0; i < deck.length; i++) {
-			int j = rand.nextInt(54);
-			Card temp = deck[j];
-			deck[j] = deck[i];
-			deck[i] = temp;
+	public void push(Card returnedCard) {
+		if (lastCard < 53 && lastCard > -2) {
+			lastCard++;
+			deck[lastCard] = returnedCard;
+		}
+		else {
+			System.out.println("Deck Push: card couldn't not be added, out of bounds.");
 		}
 	}
 
-	public static void main(String[] args) {
-		Deck test = new Deck();
-		for (int i = 0; i < 54; i++) {
-			Card card = test.pop();
-			if(card != null) System.out.println("Card " + String.valueOf(i) + ": " + card.toString());
-			else System.out.println("NULLLLLLLL");
+	protected void shuffle() {
+		Random rand = new Random();
+		for (int i = 0; i < lastCard; i++) {
+			int j = rand.nextInt(lastCard + 1);
+			Card temp = deck[j];
+			deck[j] = deck[i];
+			deck[i] = temp;
 		}
 	}
 
