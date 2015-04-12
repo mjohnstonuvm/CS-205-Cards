@@ -51,6 +51,7 @@ public class Deck extends CardObject {
 		else {
 			System.out.println("Deck Push: card couldn't not be added, out of bounds.");
 		}
+		shuffle();
 	}
 
 	protected void shuffle() {
