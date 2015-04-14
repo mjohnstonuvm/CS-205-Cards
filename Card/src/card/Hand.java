@@ -60,11 +60,11 @@ public class Hand extends CardObject{
         public static void main(String[] args) {
             Card c = new Card(2);
             Card x = new Card(Type.DRAW2);
-            Card d = new Card(8);
+            Card d = new Card(8); //second card
             Card e = new Card(Type.PEEK);
-            Card f = new Card(Type.SWAP);
-            Card g = new Card(9);
-            Card h = new Card(1);
+            Card f = new Card(Type.SWAP); //first card
+            Card g = new Card(9);// third card
+            Card h = new Card(1); //fourth card
 
             Hand a = new Hand(c, d, g, h);
             System.out.println("The total is " + a.total()); //should be 20
