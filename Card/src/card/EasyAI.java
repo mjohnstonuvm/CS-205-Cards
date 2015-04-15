@@ -54,11 +54,11 @@ public class EasyAI extends CardObject {
         System.out.println(Arrays.toString(a.CardDraw(c)));
         System.out.println(a.DrawOrDiscard(c));
         
-        //doesnt work
+        //works
         Card d = new Card(Type.PEEK);
         System.out.println(Arrays.toString(a.CardDraw(d)));
         System.out.println(a.DrawOrDiscard(d));
-        //doesnt work
+        //works
         Card e = new Card(Type.SWAP);
         System.out.println(Arrays.toString(a.CardDraw(e)));
         System.out.println(a.DrawOrDiscard(e));
