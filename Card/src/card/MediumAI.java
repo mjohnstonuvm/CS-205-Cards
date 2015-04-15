@@ -8,17 +8,23 @@ public class MediumAI extends CardObject {
     private final int numPlayers;
 
     public static Random rand;
-    private int [] hand;
+    private int [] hand = new int [4];
     private int [] peeked;
 
     public MediumAI(int players, Card one, Card two) {
         numPlayers = players;
+        peeked = new int [players*4];
         hand[0] = one.getNumber();
         hand[1] = 5;// average value
         hand[2] = 5; //average value
         hand[3] = two.getNumber();
         peeked[0] = hand[0];
+        peeked[1] = 10;
+        peeked[2] = 10;
         peeked[3] = hand[3];
+        for (int i = 4; i < players *4; i++) {
+            peeked[i] = 10;
+        }
     }
 
     public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
@@ -40,7 +46,7 @@ public class MediumAI extends CardObject {
            // return a;
             int highestindex = 0;
             int highestvalue = hand[0];
-            for (int i = 0, i < 4, i++) {
+            for (int i = 0; i < 4; i++) {
                 if (hand[i] > highestvalue) {
                     highestindex = i;
                     highestvalue = hand[i];
@@ -55,8 +61,8 @@ public class MediumAI extends CardObject {
             }
 
         } else if (drawnCard.getType() == Type.PEEK) {
-            for (int i = 0, i < peeked.length, i++) {
-                if (peeked[i] == NULL) {
+            for (int i = 0; i < peeked.length; i++) {
+                if (peeked[i] == 10) {
                     a = new int[] {1, i};
                     return a;
                 } else {
@@ -67,15 +73,15 @@ public class MediumAI extends CardObject {
            // int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
             //a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             //return a;
-            lowestindex = 5;
-            for (int i = 0, i < peeked.length, i++) {
+            int lowestindex = 5;
+            for (int i = 0; i < peeked.length; i++) {
                 if (peeked[i] < peeked[lowestindex]) {
                     lowestindex = i;
                 }
             }
             int highestindex = 0;
             int highestvalue = hand[0];
-            for (int i = 0, i < 4, i++) {
+            for (int i = 0; i < 4; i++) {
                 if (hand[i] > highestvalue) {
                     highestindex = i;
                     highestvalue = hand[i];
@@ -90,13 +96,19 @@ public class MediumAI extends CardObject {
     }
 
     public static void main(String[] args) {
-        MediumAI a = new MediumAI(3, new Card(2), new Card(4));
+        Card b = new Card(2);
+        Card f = new Card(4);
+        MediumAI a = new MediumAI(3, b, f);
         //WORKS
         Card c = new Card(9);
         System.out.println(Arrays.toString(a.CardDraw(c)));
         System.out.println(a.DrawOrDiscard(c));
         
         //doesnt work
+        Card g = new Card(4);
+        System.out.println(Arrays.toString(a.CardDraw(g)));
+        System.out.println(a.DrawOrDiscard(g));
+
         Card d = new Card(Type.PEEK);
         System.out.println(Arrays.toString(a.CardDraw(d)));
         System.out.println(a.DrawOrDiscard(d));
