@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 /**
  * Class to represent card game as a UI
  */
-public final class Game extends CardObject {
+public final class GuiGame extends CardObject {
 
     //instances of classes
     PlayClip c;
@@ -49,7 +49,7 @@ public final class Game extends CardObject {
      displays window 
      */
 
-    public Game() {
+    public GuiGame() {
         this.deck = new Deck();
         this.gamePanel = new JPanel();
         this.mainFrame = new JFrame();
@@ -62,7 +62,7 @@ public final class Game extends CardObject {
      Constructor to display game with required parameters
      */
 
-    public Game(int op, String diff, String end,String name) {
+    public GuiGame(int op, String diff, String end,String name) {
         this.deck = new Deck();
         this.gamePanel = new JPanel();
         this.mainFrame = new JFrame();
@@ -692,6 +692,6 @@ public final class Game extends CardObject {
 
     //testing
     public static void main(String[] args) {
-        new Game();
+        new GuiGame();
     }
 }

@@ -17,7 +17,7 @@ import javax.swing.*;
 public class StartMenu extends JFrame {
 
     //PlayClip c = new PlayClip("hp.au");
-    Game g;
+    GuiGame g;
     public int NUM_OPPONENTS;
     public String END_GAME, DIFFICULTY,NAME = "";
     /*
@@ -92,7 +92,7 @@ public class StartMenu extends JFrame {
             if(NAME == null){
                 NAME = "Player1";
             }
-            g = new Game(NUM_OPPONENTS, DIFFICULTY,END_GAME,NAME);
+            g = new GuiGame(NUM_OPPONENTS, DIFFICULTY,END_GAME,NAME);
         });
         startFrame.add(startButton);
         //close button
