@@ -67,7 +67,23 @@ public class MediumAI extends CardObject {
            // int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
             //a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             //return a;
-            
+            lowestindex = 5;
+            for (int i = 0, i < peeked.length, i++) {
+                if (peeked[i] < peeked[lowestindex]) {
+                    lowestindex = i;
+                }
+            }
+            int highestindex = 0;
+            int highestvalue = hand[0];
+            for (int i = 0, i < 4, i++) {
+                if (hand[i] > highestvalue) {
+                    highestindex = i;
+                    highestvalue = hand[i];
+                }
+            }
+            a = new int[] {1, highestindex, lowestindex};
+            return a;
+
         }
         return a;
 
