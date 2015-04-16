@@ -41,7 +41,7 @@ public class DiscardPile extends CardObject {
    /*
    testing
    */
-   public static void main(String args[]){
+   /*public static void main(String args[]){
    
       DiscardPile aPile = new DiscardPile();
       Card b = new Card(2);
@@ -49,5 +49,6 @@ public class DiscardPile extends CardObject {
       aPile.peek();
       Card newCard = aPile.draw();
    }//main
+   */
    
 }//DiscardPile

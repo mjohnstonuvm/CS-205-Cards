@@ -5,39 +5,53 @@ public class Game extends CardObject {
 
 	protected Deck deck = new Deck();
 	protected ArrayList<Hand> hands = new ArrayList<>();
-	protected boolean endCondition;
+	protected EasyAI ai = new EasyAI();
+	protected String endCondition;
+	protected DiscardPile dp = new DiscardPile();
 
-	public Game(boolean endCondition, int players) {
+	public Game(String endCondition, int numOfAI, String difficulty) {
 
-		for (int i = 0; i < players; i++) {
+		for (int i = 0; i < numOfAI; i++) {
 			hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 		}
 
 		this.endCondition = endCondition;
+		this.difficulty = difficulty;
 
 	}// End of Game constructor
 
 	public void run() {
 
-		printStatus();
-		Card discardPileTop = deck.pop();
+		Card dpTop = deck.pop();
 		// AVOID INFINITE LOOP IF ALL CARDS ARE POWER CARDS
-		while(discardPileTop.getType() != Type.NUM  && ) { 
-			deck.push(discardPileTop);
-			discardPileTop = deck.pop();
+		while(dpTop.getType() != Type.NUM  && ) { 
+			deck.push(dpTop);
+			dpTop = deck.pop();
 		}
 		
+		dp.add(dpTop);
+
 		// GAME LOOP
 		int roundCount = 0;
 		while(roundCount < 10) {
 			for (int i = 0; i < hands.size(); i++) {
-				// Can take top card in discard pile (unless it's a power card)
-				// or take new one from top of the deck
-
-				// choose which card to replace, or discard picked up card
-
-				// check if there are cards in the deck
-					// shuffle the discard pile and use it as deck
+				Card dpPeek = dp.draw();
+				// Player's Turn
+				if (i == 0) {
+					printStatus();
+					// Get player input
+				}
+				//AI's Turn
+				else {
+					boolean action = ai.DrawOrDiscard(dpPeek);
+					Card 
+					if (action) {
+						
+					}
+					else {
+						hands.get(i).a
+					}
+				}
 			}
 			roundCount++;
 		}
