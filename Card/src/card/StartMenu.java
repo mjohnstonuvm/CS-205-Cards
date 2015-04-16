@@ -74,14 +74,17 @@ public class StartMenu extends JFrame {
         startFrame.add(title2);
         //how to play button
         howToPlayButton.setBounds(200, 450, 200, 50);
-        howToPlayButton.addActionListener((ActionEvent sb) -> {
+        howToPlayButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
             startFrame.setVisible(false);
             howToPlay();
+            }
         });
         startFrame.add(howToPlayButton);
         //start button
         startButton.setBounds(200, 520, 200, 50);
-        startButton.addActionListener((ActionEvent sb) -> {
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
             startFrame.dispose();
             if (NUM_OPPONENTS == 0) {
                 NUM_OPPONENTS = 1;
@@ -92,8 +95,11 @@ public class StartMenu extends JFrame {
             if(NAME == null){
                 NAME = "Player1";
             }
+            //pass this to the gameloop
             g = new GuiGame(NUM_OPPONENTS, DIFFICULTY,END_GAME,NAME);
+            }
         });
+        
         startFrame.add(startButton);
         //close button
         closeButton.setBounds(200, 590, 200, 50);
@@ -105,13 +111,15 @@ public class StartMenu extends JFrame {
         startFrame.add(closeButton);
         //sound button
         soundButton.setBounds(550, 610, 50, 50);
-        soundButton.addActionListener((ActionEvent sb) -> {
+        soundButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
             if (soundButton.getText().equals("ON")) {
                 soundButton.setText("OFF");
                 //c.stop();
             } else {
                 soundButton.setText("ON");
                 //c.resume();
+            }
             }
         });
         startFrame.add(soundButton);
