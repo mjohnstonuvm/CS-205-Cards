@@ -38,6 +38,10 @@ public class MediumAI extends CardObject {
         }
     }
 
+    public boolean DrawOrDiscard() {
+        return true;
+    }
+
     public int[] CardDraw(Card drawnCard) {
         int[] a = {};
         if (drawnCard.getType() == Type.NUMBER) {
@@ -74,7 +78,7 @@ public class MediumAI extends CardObject {
             //a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             //return a;
             int lowestindex = 5;
-            for (int i = 0; i < peeked.length; i++) {
+            for (int i = 4; i < peeked.length; i++) {
                 if (peeked[i] < peeked[lowestindex]) {
                     lowestindex = i;
                 }
