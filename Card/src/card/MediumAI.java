@@ -38,6 +38,10 @@ public class MediumAI extends CardObject {
         }
     }
 
+    public boolean DrawOrDiscard() {
+        return true;
+    }
+
     public int[] CardDraw(Card drawnCard) {
         int[] a = {};
         if (drawnCard.getType() == Type.NUMBER) {

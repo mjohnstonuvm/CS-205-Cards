@@ -26,6 +26,10 @@ public class EasyAI extends CardObject {
         }
     }
 
+     public boolean DrawOrDiscard() {
+        return true;
+    }
+
     public int[] CardDraw(Card drawnCard) {
         rand = new Random();
         int[] a = {};
