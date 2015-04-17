@@ -1,5 +1,5 @@
 /*
- Created by Zach Clay-Dolan
+ Created by Zach Chay-Dolan
  */
 package card;
 
@@ -77,5 +77,5 @@ public class Hand extends CardObject{
 
         }
 
-    }
 
+}
