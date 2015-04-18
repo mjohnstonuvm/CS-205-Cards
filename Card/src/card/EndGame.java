@@ -30,15 +30,39 @@ public class EndGame extends JFrame {
         endMenu.setLayout(null);
 
         JLabel title = new JLabel("End-Game");
-        title.setBounds(100, 0, 300, 150);
+        title.setBounds(120, 0, 300, 50);
         endMenu.add(title);
         JLabel winner = new JLabel("Winner: " +  winnerS);
-        winner.setBounds(100, 150, 300, 100);
+        winner.setBounds(100, 100, 300, 50);
         endMenu.add(winner);
         JLabel difficult = new JLabel("Difficulty:" + diff);
-        difficult.setBounds(100, 250, 300, 100);
+        difficult.setBounds(100, 150, 300, 50);
         endMenu.add(difficult);
+        JLabel opp = new JLabel("Number of Opponents: " + nAI);
+        opp.setBounds(100, 200, 300, 50 );
+        endMenu.add(opp);
+        JLabel turn = new JLabel("Number of Turns: " + trns);
+        turn.setBounds(100, 250, 300, 50);
+        endMenu.add(turn);
+        newGameButton.setBounds(100, 300, 150, 50);
+        newGameButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                StartMenuTest a = new StartMenuTest();
+                a.getStartMenu();
+                endMenu.dispose();
+            }
+        });
+        endMenu.add(newGameButton);
+        closeButton.setBounds(100, 370, 150, 50);
+        closeButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.exit(0);
+            }
+        });
+        endMenu.add(closeButton);
+        endMenu.setBounds(300, 80, 400, 500);
         endMenu.setVisible(true);
+        endMenu.setResizable(false);
         return endMenu;
 	}
 	public static void setEndGame(String win, String difficulty, int numAI, int turns) {
