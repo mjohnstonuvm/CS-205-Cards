@@ -1,20 +1,20 @@
-//package card;
+package card;
 
 import java.util.ArrayList;
 
 public class Game extends CardObject {
 
-   protected Deck deck;
-   protected ArrayList<Hand> hands = new ArrayList<>();
-   protected EasyAI ai;
-   protected String endCondition, difficulty, name;
-   protected DiscardPile dp = new DiscardPile();
-   protected GuiClassTest gui = new GuiClassTest();
-   public int roundCount = 0, counter = 0, index = 0;
-   public boolean gameState = true, userTurnDone, op1TurnDone,
-            op2TurnDone, op3TurnDone, turnsDone = false;
-   Card dpTop;
-   Hand playerHand, aiHand;
+    static protected Deck deck;
+    static protected ArrayList<Hand> hands = new ArrayList<>();
+    static protected EasyAI ai;
+    static protected String endCondition, difficulty, name;
+    static protected DiscardPile dp = new DiscardPile();
+    static protected GuiClassTest gui = new GuiClassTest();
+    static public int roundCount = 0, counter = 0, index = 0;
+    static public boolean gameState = true, userTurnDone, op1TurnDone,
+            op2TurnDone, op3TurnDone, action, turnsDone = false;
+    static Card dpTop;
+    static Hand playerHand, aiHand;
 
     public Game(String endCondition, int numOfAI, String difficulty, String name) {
         //creates a new deck
@@ -53,28 +53,8 @@ public class Game extends CardObject {
         run(true, false, false, false, false);
 
     }// End of Game constructor
-    
-    public void addToDP(Card toAdd) {
-        dp.add(toAdd);
-    }
-    
-    public Card drawFromDeck() { 
-        
-        return deck.pop();
-        
-    }// End of drawFromDeck()
-    
-    public Card drawFromDP() {
-        
-        return dp.draw();
-        
-    }// End of drawFromDP()
-    
-    public String getName() {
-        return name;
-    }// End of getName()
-    
-    public void run(boolean gameState, boolean userTurnDone, boolean op1TurnDone,
+
+    public static void run(boolean gameState, boolean userTurnDone, boolean op1TurnDone,
             boolean op2TurnDone, boolean op3TurnDone) {
 
         // GAME LOOP
@@ -96,16 +76,22 @@ public class Game extends CardObject {
                             //gets AI hand
                             aiHand = new Hand(hands.get(op).peek(0), hands.get(op).peek(1), hands.get(op).peek(2), hands.get(op).peek(3));
                             if (op1TurnDone != true && op == 1) {
-                                op1TurnDone = true;
-                                opponentTurn();
+                                //if discard pile is not empty
+                                if (!dp.discardPile.isEmpty()) {
+                                    Card dpPeek = dp.draw(); //draws from discard pile
+                                    action = ai.DrawOrDiscard(dpPeek); //returns action
+                                } else {
+                                    action = ai.DrawOrDiscard(); //returns true if discardpile is empty
+                                }
+                                gui.opponentTurn(aiHand, action, op); //method for the ai to make a move
                             }
                             if (op2TurnDone != true && op == 2) {
                                 op2TurnDone = true;
-                                opponentTurn();
+                                gui.opponentTurn(aiHand, action, op); //method for the ai to make a move
                             }
                             if (op3TurnDone != true && op == 3) {
                                 op3TurnDone = true;
-                                opponentTurn();
+                                gui.opponentTurn(aiHand, action, op); //method for the ai to make a move
                             }
                         //userTurnDone = false;
                     }//end of inner for loop
@@ -125,22 +111,5 @@ public class Game extends CardObject {
         }
 
     }// End of run()
-    
-    protected void opponentTurn() {
-        boolean drawDecision;
-        int[] result;
-        //if discard pile is not empty
-        Card dpPeek = dp.draw(); //draws from discard pile
-        drawDecision = ai.DrawOrDiscard(dpPeek); //returns action
-        
-        if (drawDecision) {
-            result = ai.CardDraw(deck.pop());
-        }
-        else {
-            result = ai.CardDraw(dpPeek);
-        }
-        
-        gui.opponentTurn(result); //method for the ai to make a move
-    }
 
 }// End of Game Class

@@ -1,7 +1,7 @@
 /*
  Created by Matt Johnston
  */
-//package card;
+package card;
 
 /*
  Card class that has a type or a number associated with it

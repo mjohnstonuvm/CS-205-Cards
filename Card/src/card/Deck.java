@@ -1,4 +1,4 @@
-//package card;
+package card;
 import java.util.Random;
 
 public class Deck extends CardObject {

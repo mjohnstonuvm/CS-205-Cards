@@ -1,4 +1,4 @@
-//package card;
+package card;
 
 import java.util.Arrays;
 import java.util.Random;
