@@ -44,7 +44,7 @@ public class EasyAI extends AI {
             if (c == 1)  {
                 c = 2;
             }
-            a = new int[]{c, rand.nextInt(numPlayers * 4)}; // second part of the array is which card to peek at, starting at their own cards and going clockwise
+            a = new int[]{c, rand.nextInt(4)}; // second part of the array is which card to peek at, starting at their own cards and going clockwise
             return a;
         } else if (drawnCard.getType() == Type.SWAP) {
             int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card

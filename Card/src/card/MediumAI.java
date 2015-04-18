@@ -8,24 +8,16 @@ public class MediumAI extends AI {
     private final int numPlayers;
 
     public static Random rand;
-    private int [] hand = new int [4];
+    public int [] hand = new int [4];
     private int [] peeked;
 
     public MediumAI(int players, Card one, Card two) {
         super(players);
         numPlayers = players;
-        peeked = new int [players*4];
         hand[0] = one.getNumber();
         hand[1] = 5;// average value
         hand[2] = 5; //average value
         hand[3] = two.getNumber();
-        peeked[0] = hand[0];
-        peeked[1] = 10;
-        peeked[2] = 10;
-        peeked[3] = hand[3];
-        for (int i = 4; i < players *4; i++) {
-            peeked[i] = 10;
-        }
     }
 
     public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
@@ -67,7 +59,7 @@ public class MediumAI extends AI {
 
         } else if (drawnCard.getType() == Type.PEEK) {
             for (int i = 0; i < peeked.length; i++) {
-                if (peeked[i] == 10) {
+                if (hand[i] == 5) {
                     a = new int[] {2, i};
                     return a;
                 } else {
@@ -78,12 +70,8 @@ public class MediumAI extends AI {
            // int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
             //a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             //return a;
-            int lowestindex = 5;
-            for (int i = 4; i < peeked.length; i++) {
-                if (peeked[i] < peeked[lowestindex]) {
-                    lowestindex = i;
-                }
-            }
+            Random rand = new Random();
+            
             int highestindex = 0;
             int highestvalue = hand[0];
             for (int i = 0; i < 4; i++) {
@@ -92,7 +80,7 @@ public class MediumAI extends AI {
                     highestvalue = hand[i];
                 }
             }
-            a = new int[] {3, highestindex, lowestindex};
+            a = new int[] {3, highestindex, rand.nextInt((numPlayers - 1) * 4)};
             return a;
 
         }
