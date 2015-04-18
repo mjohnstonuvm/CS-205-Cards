@@ -61,7 +61,7 @@ public class MediumAI extends AI {
                 a = new int [] {1, highestindex};
                 return a;
             } else {
-                a = new int [] {0, 0};
+                a = new int [] {0, highestindex};
                 return a;
             }
 
