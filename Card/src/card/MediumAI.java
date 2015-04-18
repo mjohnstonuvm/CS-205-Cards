@@ -1,4 +1,4 @@
-package card;
+//package card;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -61,14 +61,14 @@ public class MediumAI extends AI {
                 a = new int [] {1, highestindex};
                 return a;
             } else {
-                a = new int [] {0, highestindex};
+                a = new int [] {0, 0};
                 return a;
             }
 
         } else if (drawnCard.getType() == Type.PEEK) {
             for (int i = 0; i < peeked.length; i++) {
                 if (peeked[i] == 10) {
-                    a = new int[] {2, i};
+                    a = new int[] {1, i};
                     return a;
                 } else {
                     a = new int[] {0, 0};
@@ -92,7 +92,7 @@ public class MediumAI extends AI {
                     highestvalue = hand[i];
                 }
             }
-            a = new int[] {3, highestindex, lowestindex};
+            a = new int[] {1, highestindex, lowestindex};
             return a;
 
         }

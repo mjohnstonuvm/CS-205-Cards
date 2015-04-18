@@ -1,7 +1,7 @@
 /*
  Created by Zach Chay-Dolan
  */
-package card;
+//package card;
 
 public class Hand extends CardObject{
 
