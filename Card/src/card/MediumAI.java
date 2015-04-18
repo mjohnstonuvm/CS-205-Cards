@@ -68,7 +68,7 @@ public class MediumAI extends AI {
         } else if (drawnCard.getType() == Type.PEEK) {
             for (int i = 0; i < peeked.length; i++) {
                 if (peeked[i] == 10) {
-                    a = new int[] {1, i};
+                    a = new int[] {2, i};
                     return a;
                 } else {
                     a = new int[] {0, 0};
@@ -92,7 +92,7 @@ public class MediumAI extends AI {
                     highestvalue = hand[i];
                 }
             }
-            a = new int[] {1, highestindex, lowestindex};
+            a = new int[] {3, highestindex, lowestindex};
             return a;
 
         }
