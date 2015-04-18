@@ -1,4 +1,4 @@
-package card;
+//package card;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -41,16 +41,10 @@ public class EasyAI extends AI {
 
         } else if (drawnCard.getType() == Type.PEEK) {
             int c = rand.nextInt(2); //first part of the array is whether or not to use the peek card
-            if (c == 1) {
-                c =2;
-            }
             a = new int[]{c, rand.nextInt(numPlayers * 4)}; // second part of the array is which card to peek at, starting at their own cards and going clockwise
             return a;
         } else if (drawnCard.getType() == Type.SWAP) {
             int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
-            if (c==1) {
-                c=3;
-            }
             a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             return a;
         }

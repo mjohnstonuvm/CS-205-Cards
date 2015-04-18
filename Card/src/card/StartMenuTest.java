@@ -1,7 +1,7 @@
 /*
  Created by Matt Johnston
  */
-package card;
+//package card;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,11 +17,11 @@ import javax.swing.*;
 public class StartMenuTest extends JFrame {
 
     //PlayClip c = new PlayClip("hp.au");
-    public static Game g;
-    public static int NUM_OPPONENTS;
-    public static String END_GAME, DIFFICULTY,NAME = "";
+    public Game g;
+    public int NUM_OPPONENTS;
+    public String END_GAME, DIFFICULTY,NAME = "";
 
-    public static JFrame getStartMenu() {
+    public JFrame getStartMenu() {
         final JFrame startFrame = new JFrame();
         JButton startButton = new JButton("Start Game");
         JButton howToPlayButton = new JButton("How to Play");
@@ -178,7 +178,7 @@ public class StartMenuTest extends JFrame {
         return startFrame;
     }
 
-    public static JFrame howToPlay() {
+    public JFrame howToPlay() {
         Scanner inputFile = null;
         String inputLine = "";
         File file = new File("howto.txt");
@@ -218,14 +218,15 @@ public class StartMenuTest extends JFrame {
      simple attribues for windows
      */
 
-    public static void getAttributes(JFrame frame) {
+    public void getAttributes(JFrame frame) {
         frame.setAlwaysOnTop(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
     public static void main(String[]args){
-        getStartMenu();
+        StartMenuTest test = new StartMenuTest();
+        test.getStartMenu();
     }
 
 }
