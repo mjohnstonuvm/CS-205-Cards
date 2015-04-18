@@ -3,7 +3,7 @@ package card;
 import java.util.Arrays;
 import java.util.Random;
 
-public class MediumAI extends CardObject {
+public class MediumAI extends AI {
 
     private final int numPlayers;
 
@@ -12,6 +12,7 @@ public class MediumAI extends CardObject {
     private int [] peeked;
 
     public MediumAI(int players, Card one, Card two) {
+        super(players);
         numPlayers = players;
         peeked = new int [players*4];
         hand[0] = one.getNumber();
@@ -36,6 +37,10 @@ public class MediumAI extends CardObject {
             return true;
 
         }
+    }
+
+    public boolean DrawOrDiscard() {
+        return true;
     }
 
     public int[] CardDraw(Card drawnCard) {

@@ -3,13 +3,14 @@ package card;
 import java.util.Arrays;
 import java.util.Random;
 
-public class EasyAI extends CardObject {
+public class EasyAI extends AI {
 
     private final int numPlayers;
 
     public static Random rand;
 
     public EasyAI(int players) {
+        super(players);
         numPlayers = players;
     }
 
@@ -24,6 +25,10 @@ public class EasyAI extends CardObject {
             return true;
 
         }
+    }
+
+     public boolean DrawOrDiscard() {
+        return true;
     }
 
     public int[] CardDraw(Card drawnCard) {

@@ -9,32 +9,51 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import javafx.scene.layout.Border;
 import javax.swing.*;
 
 /**
- * Class to represent card game as a UI
+ * Class to represent card start menu as a UI
  */
-public class Gui extends JFrame {
-   // PlayClip c = new PlayClip("hp.au");
-    /*
-     Constructor to set window
-     */
-    public Gui() {
-        super.setTitle("Rat-A-Tat CAT");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setVisible(true);
-        getStartMenu();
-    }
+public class StartMenuTest extends JFrame {
 
-    private JFrame getStartMenu() {
+    //PlayClip c = new PlayClip("hp.au");
+    public static Game g;
+    public static int NUM_OPPONENTS;
+    public static String END_GAME, DIFFICULTY,NAME = "";
+
+    public static JFrame getStartMenu() {
         final JFrame startFrame = new JFrame();
         JButton startButton = new JButton("Start Game");
         JButton howToPlayButton = new JButton("How to Play");
+        JButton closeButton = new JButton("Exit");
+        JButton submitButton = new JButton("Submit");
         JToggleButton soundButton = new JToggleButton("ON");
         //set null layout
         startFrame.setLayout(null);
+        //labels
+        JLabel nameLab = new JLabel("Your Name:");
+        nameLab.setBounds(100, 0, 610, 700);
+        startFrame.add(nameLab);
+        JTextField field = new JTextField(10);
+        field.setBounds(200, 330, 200, 30);
+        
+        startFrame.add(field);
+        submitButton.setBounds(420, 330, 100, 30);
+        submitButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                NAME = field.getText();  
+            }
+        });
+        startFrame.add(submitButton);
+        JLabel opLab = new JLabel("# Opponents:");
+        opLab.setBounds(100, 65, 610, 700);
+        startFrame.add(opLab);
+        JLabel diffLab = new JLabel("Difficulty:");
+        diffLab.setBounds(100, 25, 610, 700);
+        startFrame.add(diffLab);
+        JLabel endLab = new JLabel("End Game:");
+        endLab.setBounds(100, 230, 130, 10);
+        startFrame.add(endLab);
         //Title of game
         JLabel title = new JLabel("Rat-a-Tat Cat");
         title.setForeground(Color.blue.darker());
@@ -52,28 +71,52 @@ public class Gui extends JFrame {
         startFrame.add(title2);
         //how to play button
         howToPlayButton.setBounds(200, 450, 200, 50);
-        howToPlayButton.addActionListener((ActionEvent sb) -> {
-            System.out.println("Help");
+        howToPlayButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
             startFrame.setVisible(false);
             howToPlay();
+            }
         });
         startFrame.add(howToPlayButton);
         //start button
         startButton.setBounds(200, 520, 200, 50);
-        startButton.addActionListener((ActionEvent sb) -> {
-            System.out.println("Start Game");
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
             startFrame.dispose();
+            if (NUM_OPPONENTS == 0) {
+                NUM_OPPONENTS = 1;
+            }
+            if(END_GAME == null){
+                END_GAME = "Time";
+            }
+            if(NAME == null){
+                NAME = "Player1";
+            }
+            //pass this to the gameloop
+            g = new Game(END_GAME,NUM_OPPONENTS, DIFFICULTY,NAME);
+            }
         });
+        
         startFrame.add(startButton);
+        //close button
+        closeButton.setBounds(200, 590, 200, 50);
+        closeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        startFrame.add(closeButton);
         //sound button
         soundButton.setBounds(550, 610, 50, 50);
-        soundButton.addActionListener((ActionEvent sb) -> {
+        soundButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
             if (soundButton.getText().equals("ON")) {
                 soundButton.setText("OFF");
-              //  c.stop();
+                //c.stop();
             } else {
                 soundButton.setText("ON");
-                //c.play();
+                //c.resume();
+            }
             }
         });
         startFrame.add(soundButton);
@@ -83,7 +126,7 @@ public class Gui extends JFrame {
         op.setBounds(200, 390, 200, 50);
         op.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ops) {
-                System.out.println(op.getSelectedItem());
+                NUM_OPPONENTS = Integer.parseInt((String) op.getSelectedItem());
             }
         });
         startFrame.add(op);
@@ -93,7 +136,7 @@ public class Gui extends JFrame {
         difficulty.setBounds(200, 350, 200, 50);
         difficulty.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent d) {
-                System.out.println(difficulty.getSelectedItem());
+                DIFFICULTY = difficulty.getSelectedItem().toString();
             }
         });
         startFrame.add(difficulty);
@@ -104,11 +147,26 @@ public class Gui extends JFrame {
         JRadioButton roundNum = new JRadioButton("Number of Rounds", true);
         JRadioButton time = new JRadioButton("Time");
         JRadioButton numPoints = new JRadioButton("Number of points");
-        //group the radio buttons
+        //adds action listener to raio buttons
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() instanceof JRadioButton) {
+                    JRadioButton radioButton = (JRadioButton) e.getSource();
+                    END_GAME = radioButton.getText();
+                }
+            }
+        };
+        roundNum.addActionListener(actionListener);
+        time.addActionListener(actionListener);
+        numPoints.addActionListener(actionListener);
+
+        //Group the radio buttons.
         ButtonGroup group = new ButtonGroup();
         group.add(roundNum);
         group.add(time);
         group.add(numPoints);
+
         //add buttons to panel
         panel.add(roundNum);
         panel.add(time);
@@ -120,7 +178,7 @@ public class Gui extends JFrame {
         return startFrame;
     }
 
-    public JFrame howToPlay() {
+    public static JFrame howToPlay() {
         Scanner inputFile = null;
         String inputLine = "";
         File file = new File("howto.txt");
@@ -160,15 +218,14 @@ public class Gui extends JFrame {
      simple attribues for windows
      */
 
-    public void getAttributes(JFrame frame) {
+    public static void getAttributes(JFrame frame) {
         frame.setAlwaysOnTop(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
-
-    public static void main(String[] args) {
-        new Gui();
+    public static void main(String[]args){
+        getStartMenu();
     }
 
 }
