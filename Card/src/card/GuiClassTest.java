@@ -380,22 +380,27 @@ public final class GuiClassTest extends CardObject {
 
     }
 
-    public void opponentTurn(int[] decision) {
-	if (decision[0] == 0) {
+    public void opponentTurn(int[] decision, boolean fromDeck, String[] fileNames) {
+    	if (decision[0] == 0) {
+            // fileNames[0] is card to discard
             // Add to discard pile
-	}
-	else if (decision[0] == 1) {
+    	}
+    	else if (decision[0] == 1) {
+            // fileNames[0] is from hand card to discard
+            // fileNames[1] is the drawn card to be added to the hand
             // Add number card to hand
-	}
-	else if (decision[0] == 2) {
+    	}
+    	else if (decision[0] == 2) {
+            // fileNames[0] is the peek card to be put on the discard pile
             // Peek
-	}
-	else if (decision[0] == 3) {
+    	}
+    	else if (decision[0] == 3) {
+            // fileNames[0] is the swap card to be put on the discard pile
             // Swap
-	}
-	else {
+    	}
+    	else {
             // Ya done fucked up
-	}
+    	}
     }
 
 }
