@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 public final class GuiGame extends CardObject {
 
     //instances of classes
-    PlayClip c;
+    //PlayClip c;
     Card card, deckCard;
     DiscardPile discardClass = new DiscardPile();
     Hand userHand, op1Hand, op2Hand, op3Hand;
@@ -658,10 +658,10 @@ public final class GuiGame extends CardObject {
             public void actionPerformed(ActionEvent ex) {
                 if (ex.getActionCommand().equals(toggleON.getText())) {
                     System.out.println("on");
-                    c.resume();
+                   // c.resume();
                 } else {
                     System.out.println("off");
-                    c.stop();
+                    //c.stop();
                 }
             }
         });

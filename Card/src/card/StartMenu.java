@@ -14,10 +14,6 @@ import javax.swing.*;
 /**
  * Class to represent card start menu as a UI
  */
-
-public class Gui extends JFrame {
-   // PlayClip c = new PlayClip("hp.au");
-=======
 public class StartMenu extends JFrame {
 
     //PlayClip c = new PlayClip("hp.au");
@@ -119,18 +115,11 @@ public class StartMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
             if (soundButton.getText().equals("ON")) {
                 soundButton.setText("OFF");
-<<<<<<< HEAD:Card/src/card/Gui.java
-              //  c.stop();
-            } else {
-                soundButton.setText("ON");
-                //c.play();
-=======
                 //c.stop();
             } else {
                 soundButton.setText("ON");
                 //c.resume();
             }
->>>>>>> 99a51de31d9ca9922880c6d59714b88134138bb9:Card/src/card/StartMenu.java
             }
         });
         startFrame.add(soundButton);
@@ -239,12 +228,4 @@ public class StartMenu extends JFrame {
         frame.setVisible(true);
     }
 
-<<<<<<< HEAD:Card/src/card/Gui.java
-    public static void main(String[] args) {
-        new Gui();
-    }
-
 }
-=======
-}
->>>>>>> 99a51de31d9ca9922880c6d59714b88134138bb9:Card/src/card/StartMenu.java
