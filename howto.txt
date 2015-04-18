@@ -1,0 +1,26 @@
+SET-UP:
+
+
+Choose one player to be the dealer. The oldest player can be the scorekeeper. 
+The scorekeeper will record each player’s score at the end of each round of play. 
+Shuffle the deck. The player to the left of the dealer cuts the cards. 
+The dealer then deals four cards, one at a time and face down, to each player. 
+The remaining cards are placed face down, in the middle of the table, as the draw 
+pile. The top card of the draw pile is turned over to start the discard pile. 
+If that card is a Power card, it is placed back in the deck and another card 
+is turned over. Without looking at his cards, each player places his four 
+cards face down in a line on the table in front of him. 
+
+
+GAME-PLAY:
+
+
+During the game, players will always have their four cards face down on the
+table. To begin the game, players peek at their two outer cards once, then
+turn them face down again. Each player now knows the point values of two of
+his four cards and needs to remember them during the game.
+If either of the outer cards are Power cards, the player keeps them, but they
+do not have their powers (described below). Power cards only have their
+powers when they are drawn from the top of the draw pile.
+The player to the left of the dealer has the first turn, and play continues in a
+clockwise direction.

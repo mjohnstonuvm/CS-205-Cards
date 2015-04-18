@@ -1,7 +1,7 @@
 /*
  Created by Matt Johnston
  */
-package card;
+//package card;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -26,6 +26,7 @@ import javax.swing.Timer;
 public final class GuiClassTest extends CardObject {
 
     //variables
+    private Game game;
     private final JMenu fileMenu, helpMenu;
     private final JPanel gamePanel;
     private final JFrame mainFrame;
@@ -41,10 +42,7 @@ public final class GuiClassTest extends CardObject {
     JButton deckPic, discardPic, newCard;
     Card deckCard, discardCard;
     Timer timer;
-    JLabel userLabel = new JLabel(Game.name);
-    JLabel op1Label = new JLabel("Opponent 1");
-    JLabel op2Label = new JLabel("Opponent 2");
-    JLabel op3Label = new JLabel("Opponent 3");
+
     /*
      displays window 
      */
@@ -102,8 +100,6 @@ public final class GuiClassTest extends CardObject {
                 userPanel.add(ButtonsArray[i], gb);
                 //add panel to the game panel
                 gamePanel.add(userPanel, BorderLayout.SOUTH);
-                //add label to game panel
-                gamePanel.add(userLabel,BorderLayout.SOUTH);
             }
             //gets teh buttons for the opponnent panel
             if (i >= 4 && i <= 7) {
@@ -111,8 +107,6 @@ public final class GuiClassTest extends CardObject {
                 opponent1.add(ButtonsArray[i], gb);
                  //add panel to the game panel
                 gamePanel.add(opponent1, BorderLayout.NORTH);
-                //add label to game panel
-                gamePanel.add(op1Label,BorderLayout.NORTH);
             }
             //gets the buttons for the opponent 2 panel
             if (i >= 8 && i <= 11) {
@@ -123,7 +117,6 @@ public final class GuiClassTest extends CardObject {
                 ButtonsArray[i] = new JButton(op2); //create new button
                 opponent2.add(ButtonsArray[i], gb); //add button to panel
                 gamePanel.add(opponent2, BorderLayout.EAST); //add to game panel
-                gamePanel.add(op2Label,BorderLayout.EAST); //add label to panel
             }
             //gets the buttons for the opponent 3 panel
             if (i >= 12 && i <= 15) {
@@ -133,7 +126,6 @@ public final class GuiClassTest extends CardObject {
                 ButtonsArray[i] = new JButton(op2);
                 opponent3.add(ButtonsArray[i], gb);
                 gamePanel.add(opponent3, BorderLayout.WEST);
-                gamePanel.add(op3Label,BorderLayout.WEST);
             }
             //sets all the cards to false, so you cant click them
             ButtonsArray[i].setEnabled(false);
@@ -224,7 +216,7 @@ public final class GuiClassTest extends CardObject {
     private class deckListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            deckCard = Game.deck.pop(); //takes from deck
+            deckCard = game.drawFromDeck(); //takes from deck
             cardTypePrompt(); //gets prompt from user on what to do with drawn card
             //loops through buttons
             for (int i = 0; i < ButtonsArray.length; i++) {
@@ -238,7 +230,7 @@ public final class GuiClassTest extends CardObject {
                             //prevents user from clicking twice
                             if (numClicks < 2) {
                                 //swaps the card using game class
-                                Game.playerHand.swap(deckCard, index);
+                                game.playerHand.swap(deckCard, index);
                                 //prints confirmation to use
                                 JOptionPane.showMessageDialog(gamePanel, "Card Swapped!");
                                 deckPic.setEnabled(false);//should be false
@@ -256,14 +248,9 @@ public final class GuiClassTest extends CardObject {
     private class discardListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            discardCard = Game.dp.draw(); //takes from deck
-            //if stack is empty, remove the panel
-            if (Game.dp.discardPile.isEmpty()) {
-                discardPanel.setVisible(false);
-            } else {
-                //gets image for discard pile, from top of discard stack
-                newCard = new JButton(new ImageIcon(Game.dp.peek().getCard()));
-            }
+            discardCard = game.drawFromDP(); //takes from deck
+            //gets image for discard pile, from top of discard stack
+            //newCard = new JButton(new ImageIcon(discardCard));
             discardPanel.revalidate(); //refresh discard panel
             discardPic.setEnabled(false); //sets deck card enable to false
             //cardTypePrompt(); //gets prompt from user on what to do with drawn card
@@ -276,7 +263,7 @@ public final class GuiClassTest extends CardObject {
     public void prompt() {
         //deck or discard pile prompt
         String[] optionValues = new String[]{"Draw from Deck", "Draw from Discard Pile"};
-        Object selectedValue = JOptionPane.showOptionDialog(null, Game.name
+        Object selectedValue = JOptionPane.showOptionDialog(null, game.getName()
                 + ", do you want to draw from the DECK or DISCARD Pile?", "DRAW", JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null,
                 optionValues, optionValues[0]);
@@ -332,7 +319,7 @@ public final class GuiClassTest extends CardObject {
                 }
             } else {
                 //add to discard pile
-                Game.dp.add(deckCard);
+                game.addToDP(deckCard);
                 discardPanel.removeAll();
                 newCard = new JButton(new ImageIcon(deckCard.getCard()));
                 discardPanel.add(newCard);//add the card to the panel
@@ -353,7 +340,7 @@ public final class GuiClassTest extends CardObject {
                 //returns game state back to the loop
                 gameState = true;
                 userTurnDone = true;
-                Game.run(gameState, userTurnDone, Game.op1TurnDone, Game.op2TurnDone, Game.op3TurnDone);
+                game.run(gameState, userTurnDone, game.op1TurnDone, game.op2TurnDone, game.op3TurnDone);
             }
         });
         timer.start();
@@ -381,7 +368,7 @@ public final class GuiClassTest extends CardObject {
         //if round is the first round
         if (round == 0) {
             JOptionPane.showMessageDialog(gamePanel, "Welcome, "
-                    + Game.name + "!" + " You go first!"
+                    + game.getName() + "!" + " You go first!"
                     + " PEEK at"
                     + " your outer 2 cards!");
             //sets the first and last card to enabled
@@ -393,69 +380,22 @@ public final class GuiClassTest extends CardObject {
 
     }
 
-    public void opponentTurn(Hand h, boolean action, int opponent) {
-        String d; //string for output
-        //if true, draw from deck
-        if (action == true) {
-            d = "deck";
-        } else {
-            d = "discard";
-        }
-        JOptionPane.showMessageDialog(gamePanel, "It is opponent " + opponent
-                + "'s turn, they are drawing from the " + d + " pile");
-        //draw from deck
-        if (action == true) {
-            deckCard = Game.deck.pop(); //pop a card from deck
-            int a[] = Game.ai.CardDraw(deckCard); //uses ai function to determine decision
-            System.out.println("AI decision " + Arrays.toString(a));
-            
-            //add to discard pile if first index == 0
-            if (a[0] == 0) {
-                Game.dp.add(deckCard); //add card to discard pile
-                newCard = new JButton(new ImageIcon(deckCard.getCard()));
-                discardPanel.removeAll();
-                discardPanel.add(newCard);//add the card to the panel
-                discardPanel.revalidate(); //refresh discard panel
-            } else {
-                //if type is a number
-                if (deckCard.getType() == Type.NUMBER) {
-                    //swap it using the 2nd index value
-                    Game.hands.get(opponent).swap(deckCard, a[1]);
-                    //if type is a peek
-                }
-                if (deckCard.getType() == Type.PEEK) {
-                    //swap it using the 2nd index from array
-                    Game.aiHand.peek(a[1]);
-                    //if type equals swap
-                }
-                if (deckCard.getType() == Type.SWAP) {
-                    System.out.println("swap");
-
-                }
-                if (deckCard.getType() == Type.DRAW2) {
-                    System.out.println("daw2");
-                }
-            }
-        }
-        //draw from discard pile
-        if (action == false) {
-            discardCard = Game.dp.draw(); //pop a card from discard pile
-            int a[] = Game.ai.CardDraw(discardCard); //uses ai function to determine decision
-            //swap it using the 2nd index value
-            Game.aiHand.swap(discardCard, a[1]);
-            if (Game.dp.discardPile.isEmpty()) {
-                discardPanel.setVisible(false);
-            } else {
-                discardPanel.removeAll();
-            }
-            discardPanel.revalidate(); //refresh discard panel
-        }
-
-        if (opponent == 1) {
-            op1TurnDone = true;
-            userTurnDone = true;
-            Game.run(Game.gameState, userTurnDone, op1TurnDone, Game.op2TurnDone, Game.op3TurnDone);
-        }
+    public void opponentTurn(int[] decision) {
+	if (decision[0] == 0) {
+            // Add to discard pile
+	}
+	else if (decision[0] == 1) {
+            // Add number card to hand
+	}
+	else if (decision[0] == 2) {
+            // Peek
+	}
+	else if (decision[0] == 3) {
+            // Swap
+	}
+	else {
+            // Ya done fucked up
+	}
     }
 
 }
