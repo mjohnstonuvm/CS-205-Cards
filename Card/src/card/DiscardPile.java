@@ -1,4 +1,4 @@
-/*
+ /*
  Created by My Mai
  */
 package card;
@@ -32,10 +32,9 @@ public class DiscardPile extends CardObject {
   /*
    method for peeking at the top card of the discard pile
    */
-   public void peek(){
+   public Card peek(){
       Card peekAt = discardPile.peek();
-      System.out.println("Card Number: " + peekAt.getNumber());
-      System.out.println("Card Type: " + peekAt.getType());
+      return peekAt;
    }
    
    /*
