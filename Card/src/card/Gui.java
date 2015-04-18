@@ -16,7 +16,7 @@ import javax.swing.*;
  * Class to represent card game as a UI
  */
 public class Gui extends JFrame {
-    PlayClip c = new PlayClip("hp.au");
+   // PlayClip c = new PlayClip("hp.au");
     /*
      Constructor to set window
      */
@@ -70,10 +70,10 @@ public class Gui extends JFrame {
         soundButton.addActionListener((ActionEvent sb) -> {
             if (soundButton.getText().equals("ON")) {
                 soundButton.setText("OFF");
-                c.stop();
+              //  c.stop();
             } else {
                 soundButton.setText("ON");
-                c.play();
+                //c.play();
             }
         });
         startFrame.add(soundButton);
