@@ -2,6 +2,7 @@
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class AI extends CardObject {
 
@@ -28,7 +29,7 @@ public class AI extends CardObject {
     public void Update(ArrayList<Hand> handsin) {
         return;
     }
-
+/*
     public static void main(String[] args) {
         AI a = new EasyAI(3);
         //WORKS
@@ -45,4 +46,5 @@ public class AI extends CardObject {
         System.out.println(Arrays.toString(a.CardDraw(e)));
         System.out.println(a.DrawOrDiscard(e));
     }
+    */
 }

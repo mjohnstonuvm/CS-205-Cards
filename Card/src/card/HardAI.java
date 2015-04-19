@@ -14,13 +14,14 @@ public class HardAI extends AI {
     private ArrayList<Hand> hands;
     public HardAI(int players, ArrayList<Hand> handsin, int player) {
         super(players);
+        numPlayers = players;
         hands = handsin;
         playernum = player;
          Hand h  = handsin.get(player);
-       ownhand[0] = h.peek(0);
-       ownhand[1] = h.peek(1);
-       ownhand[2] = h.peek(2);
-       ownhand[3] = h.peek(3);
+       ownhand[0] = h.peek(0).getNumber();
+       ownhand[1] = h.peek(1).getNumber();
+       ownhand[2] = h.peek(2).getNumber();
+       ownhand[3] = h.peek(3).getNumber();
     }
 
     public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
@@ -49,11 +50,11 @@ public class HardAI extends AI {
 
     public void Update(ArrayList<Hand> handsin) {
         hands = handsin;
-          Hand h  = handsin.get(player);
-       ownhand[0] = h.peek(0);
-       ownhand[1] = h.peek(1);
-       ownhand[2] = h.peek(2);
-       ownhand[3] = h.peek(3);
+          Hand h  = handsin.get(playernum);
+       ownhand[0] = h.peek(0).getNumber();
+       ownhand[1] = h.peek(1).getNumber();
+       ownhand[2] = h.peek(2).getNumber();
+       ownhand[3] = h.peek(3).getNumber();
     }
 
     public int[] CardDraw(Card drawnCard) {
@@ -69,6 +70,10 @@ public class HardAI extends AI {
                     highestindex = i;
                     highestvalue = ownhand[i];
                 }
+                if (ownhand[i]==-1) {
+                    highestindex = i;
+                    highestvalue = 10;
+                }
             }
             if (drawnCard.getNumber() < highestvalue) {
                 a = new int [] {1, highestindex};
@@ -80,27 +85,21 @@ public class HardAI extends AI {
             }
 
         } else if (drawnCard.getType() == Type.PEEK) {
-            for (int i = 0; i < peeked.length; i++) {
-                if (hand[i] == 5) {
-                    a = new int[] {2, i};
-                    return a;
-                } else {
                     a = new int[] {0, 0};
                     return a;
-                }
             }
-        } else if (drawnCard.getType() == Type.SWAP) {
+         else if (drawnCard.getType() == Type.SWAP) {
            // int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
             //a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             //return a;
             
             
             int highestindex = 0;
-            int highestvalue = hand[0];
+            int highestvalue = ownhand[0];
             for (int i = 0; i < 4; i++) {
-                if (hand[i] > highestvalue) {
+                if (ownhand[i] > highestvalue) {
                     highestindex = i;
-                    highestvalue = hand[i];
+                    highestvalue = ownhand[i];
                 }
             }
             int lowestplayer = 0;
@@ -109,10 +108,10 @@ public class HardAI extends AI {
             for (int i = 0; i < 4; i++) {
                 Hand f = hands.get(i);
                 for (int j= 0; j < 4; j++ ) {
-                    if (f.peek(j) < lowestvalue) {
+                    if (f.peek(j).getNumber() < lowestvalue && f.peek(j).getType() == Type.NUMBER) {
                         lowestplayer = i;
                         lowestindex = j;
-                        lowestvalue = f.peek(j);
+                        lowestvalue = f.peek(j).getNumber();
                     }
                 }
             }

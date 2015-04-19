@@ -2,6 +2,7 @@
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class MediumAI extends AI {
 
@@ -9,12 +10,13 @@ public class MediumAI extends AI {
 
     public static Random rand;
     public int [] hand = new int [4];
-    private int ownhand = new int[4];
+    private int[] ownhand = new int[4];
     private int playernum;
     private ArrayList<Hand> hands;
 
     public MediumAI(int players, ArrayList<Hand> handsin, int player) {
         super(players);
+        numPlayers = players;
         hands = handsin;
         playernum = player;
         Hand h  = handsin.get(player);
@@ -53,11 +55,11 @@ public class MediumAI extends AI {
 
     public void Update(ArrayList<Hand> handsin) {
         hands = handsin;
-          Hand h  = handsin.get(player);
-       ownhand[0] = h.peek(0);
-       ownhand[1] = h.peek(1);
-       ownhand[2] = h.peek(2);
-       ownhand[3] = h.peek(3);
+          Hand h  = handsin.get(playernum);
+          ownhand[0] = h.peek(0).getNumber();
+       ownhand[1] = h.peek(1).getNumber();
+       ownhand[2] = h.peek(2).getNumber();
+       ownhand[3] = h.peek(3).getNumber();
     }
 
     public int[] CardDraw(Card drawnCard) {
@@ -73,6 +75,10 @@ public class MediumAI extends AI {
                     highestindex = i;
                     highestvalue = hand[i];
                 }
+                if (hand[i]==-1) {
+                    highestindex = i;
+                    highestvalue = 10;
+                }
             }
             if (drawnCard.getNumber() < highestvalue) {
                 a = new int [] {1, highestindex};
@@ -85,7 +91,7 @@ public class MediumAI extends AI {
             }
 
         } else if (drawnCard.getType() == Type.PEEK) {
-            for (int i = 0; i < peeked.length; i++) {
+            for (int i = 0; i < hand.length; i++) {
                 if (hand[i] == 5) {
                     a = new int[] {2, i};
                      hand[i] = ownhand[i];
@@ -111,8 +117,8 @@ public class MediumAI extends AI {
                 }
             }
             int d = rand.nextInt(4);
-            while (d== player) {
-                int d = rand.nextInt(4);
+            while (d== playernum) {
+                d = rand.nextInt(4);
             }
             a = new int[] {3, highestindex,  d, rand.nextInt(4)};
             hand[highestindex] = 5;
