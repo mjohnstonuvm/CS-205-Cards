@@ -2,6 +2,7 @@
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class EasyAI extends AI {
 
@@ -55,7 +56,7 @@ public class EasyAI extends AI {
             }
             int d = rand.nextInt(4);
             while (d== player) {
-                int d = rand.nextInt(4);
+                d = rand.nextInt(4);
             }
             a = new int[]{c, rand.nextInt(4), d, rand.nextInt(4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             return a;
@@ -67,7 +68,7 @@ public class EasyAI extends AI {
         return;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         EasyAI a = new EasyAI(3);
         //WORKS
         Card c = new Card(9);
@@ -83,4 +84,5 @@ public class EasyAI extends AI {
         System.out.println(Arrays.toString(a.CardDraw(e)));
         System.out.println(a.DrawOrDiscard(e));
     }
+    */
 }
