@@ -46,7 +46,6 @@ public final class GuiClassTest extends CardObject {
     /*
      displays window 
      */
-
     public GuiClassTest() {
         this.gamePanel = new JPanel();
         this.mainFrame = new JFrame();
@@ -105,7 +104,7 @@ public final class GuiClassTest extends CardObject {
             if (i >= 4 && i <= 7) {
                 //add buttons to panel
                 opponent1.add(ButtonsArray[i], gb);
-                 //add panel to the game panel
+                //add panel to the game panel
                 gamePanel.add(opponent1, BorderLayout.NORTH);
             }
             //gets the buttons for the opponent 2 panel
@@ -381,26 +380,35 @@ public final class GuiClassTest extends CardObject {
     }
 
     public void opponentTurn(int[] decision, boolean fromDeck, String[] fileNames) {
-    	if (decision[0] == 0) {
-            // fileNames[0] is card to discard
+        // fileNames[0] is card to discard
+        JButton discard = new JButton(new ImageIcon(fileNames[0]));
+        //decision = 0, throw away
+        //decision = 1, swap with one in hand
+        //decision = 2, peek a card
+        //decision = 3, swap card with another player
+
+        if (decision[0] == 0) {
             // Add to discard pile
-    	}
-    	else if (decision[0] == 1) {
-            // fileNames[0] is from hand card to discard
-            // fileNames[1] is the drawn card to be added to the hand
+            discardPanel.add(discard);
+            discardPanel.revalidate();
+        } else if (decision[0] == 1) {
             // Add number card to hand
-    	}
-    	else if (decision[0] == 2) {
+            // fileNames[0] is from hand card to discard
+            discardPanel.add(discard);
+            discardPanel.revalidate();
+        } else if (decision[0] == 2) {
             // fileNames[0] is the peek card to be put on the discard pile
+            discardPanel.add(discard);
+            discardPanel.revalidate();
             // Peek
-    	}
-    	else if (decision[0] == 3) {
+        } else if (decision[0] == 3) {
             // fileNames[0] is the swap card to be put on the discard pile
+            discardPanel.add(discard);
+            discardPanel.revalidate();
             // Swap
-    	}
-    	else {
+        } else {
             // Ya done fucked up
-    	}
+        }
     }
 
 }
