@@ -63,7 +63,7 @@ public class EasyAI extends AI {
         return a;
 
     }
-    public void Update() {
+    public void Update(ArrayList<Hand> handsin) {
         return;
     }
 

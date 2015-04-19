@@ -25,7 +25,7 @@ public class AI extends CardObject {
         return a;
 
     }
-    public void Update() {
+    public void Update(ArrayList<Hand> handsin) {
         return;
     }
 
