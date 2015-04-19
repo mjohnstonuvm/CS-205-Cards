@@ -48,7 +48,7 @@ public class Hand extends CardObject{
         /*
         Replaces all power cards until number cards
         */
-        public void replacePowerCards() {
+        private void replacePowerCards() {
             for (int i = 0; i < 4; i++) {
                 while (this.cards[i].getType() != Type.NUMBER) {
 					//Draw a new card

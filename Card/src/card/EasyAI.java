@@ -8,10 +8,12 @@ public class EasyAI extends AI {
     private final int numPlayers;
 
     public static Random rand;
+    private int player;
 
-    public EasyAI(int players) {
+    public EasyAI(int players, int play) {
         super(players);
         numPlayers = players;
+        player = play;
     }
 
     public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
@@ -51,11 +53,18 @@ public class EasyAI extends AI {
             if (c == 1)  {
                 c = 3;
             }
-            a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
+            int d = rand.nextInt(4);
+            while (d== player) {
+                int d = rand.nextInt(4);
+            }
+            a = new int[]{c, rand.nextInt(4), d, rand.nextInt(4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             return a;
         }
         return a;
 
+    }
+    public void Update() {
+        return;
     }
 
     public static void main(String[] args) {

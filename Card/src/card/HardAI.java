@@ -2,43 +2,39 @@
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
 
-public class MediumAI extends AI {
+public class HardAI extends AI {
 
     private final int numPlayers;
 
     public static Random rand;
-    public int [] hand = new int [4];
-    private int ownhand = new int[4];
+    private int [] ownhand = new int[4];
     private int playernum;
     private ArrayList<Hand> hands;
-
-    public MediumAI(int players, ArrayList<Hand> handsin, int player) {
+    public HardAI(int players, ArrayList<Hand> handsin, int player) {
         super(players);
         hands = handsin;
         playernum = player;
-        Hand h  = handsin.get(player);
+         Hand h  = handsin.get(player);
        ownhand[0] = h.peek(0);
        ownhand[1] = h.peek(1);
        ownhand[2] = h.peek(2);
        ownhand[3] = h.peek(3);
-       hand[0] = ownhand[0];
-       hand[1] = 5;
-       hand[2] = 5;
-       hand[3] = ownhand[3];
     }
 
     public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
         //true means Draw pile false means discard pile
-          int highestindex = 0;
-            int highestvalue = hand[0];
+        int highestindex = 0;
+            int highestvalue = ownhand[0];
             for (int i = 0; i < 4; i++) {
-                if (hand[i] > highestvalue) {
+                if (ownhand[i] > highestvalue) {
                     highestindex = i;
-                    highestvalue = hand[i];
+                    highestvalue = ownhand[i];
                 }
             }
-        if (dis.getNumber() <= highestvalue && dis.getType() == Type.NUMBER) { // if the discard has a less than 5 than use it to swap with your hand
+
+        if (dis.getNumber() <= 5 && dis.getType() == Type.NUMBER && dis.getNumber() < highestvalue) { // if the discard has a less than 5 than use it to swap with your hand
             return false;
 
         } else {
@@ -67,20 +63,19 @@ public class MediumAI extends AI {
            // a = new int[]{c, rand.nextInt(4)}; //second part of the array is which hand part it should be put in
            // return a;
             int highestindex = 0;
-            int highestvalue = hand[0];
+            int highestvalue = ownhand[0];
             for (int i = 0; i < 4; i++) {
-                if (hand[i] > highestvalue) {
+                if (ownhand[i] > highestvalue) {
                     highestindex = i;
-                    highestvalue = hand[i];
+                    highestvalue = ownhand[i];
                 }
             }
             if (drawnCard.getNumber() < highestvalue) {
                 a = new int [] {1, highestindex};
-                 hand[highestindex]= drawnCard.getNumber();
                 return a;
-               
+                 
             } else {
-                a = new int [] {0, highestindex};
+                a = new int [] {0, 0};
                 return a;
             }
 
@@ -88,9 +83,7 @@ public class MediumAI extends AI {
             for (int i = 0; i < peeked.length; i++) {
                 if (hand[i] == 5) {
                     a = new int[] {2, i};
-                     hand[i] = ownhand[i];
                     return a;
-                   
                 } else {
                     a = new int[] {0, 0};
                     return a;
@@ -100,7 +93,7 @@ public class MediumAI extends AI {
            // int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
             //a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             //return a;
-            Random rand = new Random();
+            
             
             int highestindex = 0;
             int highestvalue = hand[0];
@@ -110,23 +103,31 @@ public class MediumAI extends AI {
                     highestvalue = hand[i];
                 }
             }
-            int d = rand.nextInt(4);
-            while (d== player) {
-                int d = rand.nextInt(4);
+            int lowestplayer = 0;
+            int lowestindex = 0;
+            int lowestvalue = 9;
+            for (int i = 0; i < 4; i++) {
+                Hand f = hands.get(i);
+                for (int j= 0; j < 4; j++ ) {
+                    if (f.peek(j) < lowestvalue) {
+                        lowestplayer = i;
+                        lowestindex = j;
+                        lowestvalue = f.peek(j);
+                    }
+                }
             }
-            a = new int[] {3, highestindex,  d, rand.nextInt(4)};
-            hand[highestindex] = 5;
+            a = new int[] {3, highestindex, lowestplayer, lowestindex};
             return a;
 
         }
         return a;
 
     }
-
-    /*public static void main(String[] args) {
+/*
+    public static void main(String[] args) {
         Card b = new Card(2);
         Card f = new Card(4);
-        MediumAI a = new MediumAI(3, b, f);
+        HardAI a = new HardAI(3, b, f);
         //WORKS
         Card c = new Card(9);
         System.out.println(Arrays.toString(a.CardDraw(c)));

@@ -25,6 +25,9 @@ public class AI extends CardObject {
         return a;
 
     }
+    public void Update() {
+        return;
+    }
 
     public static void main(String[] args) {
         AI a = new EasyAI(3);
