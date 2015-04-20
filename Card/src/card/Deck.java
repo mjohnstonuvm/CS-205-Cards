@@ -4,7 +4,7 @@ import java.util.Random;
 public class Deck extends CardObject {
 
 	protected CardObject.Card[] deck = new CardObject.Card[54];
-	public int lastCard = 53;
+	protected int lastCard = 53;
 	public final int length = deck.length;
 
 	public Deck() {
@@ -34,10 +34,13 @@ public class Deck extends CardObject {
 	public CardObject.Card pop() {
 		CardObject.Card returnCard = null;
 
-		if (lastCard < deck.length) {
+		if (lastCard >= 0) {
 			returnCard = deck[lastCard];
 			deck[lastCard] = null;
 			lastCard--;
+		}
+		else {
+			System.out.println("Deck Pop: card could not be removed, out of bounds.");
 		}
 		
 		return returnCard;
@@ -45,14 +48,14 @@ public class Deck extends CardObject {
 	}
 
 	public void push(CardObject.Card returnedCard) {
-		if (lastCard < 53 && lastCard > -2) {
+		if (lastCard < 53 && lastCard >= -1) {
 			lastCard++;
 			deck[lastCard] = returnedCard;
 		}
 		else {
-			System.out.println("Deck Push: card couldn't not be added, out of bounds.");
+			System.out.println("Deck Push: card could not be added, out of bounds.");
 		}
-	}
+	}// End
 
 	protected void shuffle() {
 		Random rand = new Random();

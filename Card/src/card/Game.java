@@ -26,11 +26,12 @@ public class Game extends CardObject {
         ai = new EasyAI(numOfAI);
 
         //creates the user hand
-        hands.add(new Hand(hands.get(0).peek(0), hands.get(0).peek(1), hands.get(0).peek(2), hands.get(0).peek(3)));
+        hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
         //deals hands to players
-        for (int i = 0; i < numOfAI + 1; i++) {
+        while (numOfAI > 0) {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
+            numOfAI--;
         }
 
         //pops a card from the deck
@@ -65,7 +66,7 @@ public class Game extends CardObject {
                 if (i == 0) {
                     gameState = false;
                     //passes the game data to gui for user's turn
-                    data = gui.UserTurn(data);
+                    data = gui.userTurn(data);
                 }
                 else {
                     opponentTurn(i);
@@ -74,8 +75,10 @@ public class Game extends CardObject {
             if (roundCount == 0) {
                 data.firstRound = false;
             }
-            roundCount++;    
+            roundCount++; 
         }
+
+        // End game statistics
 
     }// End of run()
     
