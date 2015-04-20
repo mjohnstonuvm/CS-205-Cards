@@ -29,9 +29,8 @@ public class Game extends CardObject {
         hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
         //deals hands to players
-        while (numOfAI > 0) {
+        for (int i = 0; i < numOfAI; i++) {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
-            numOfAI--;
         }
 
         //pops a card from the deck
@@ -46,7 +45,7 @@ public class Game extends CardObject {
         //add to discard pile
         dp.add(dpTop);
 
-        data = new GameData(deck, dp, hands, playerName);
+        data = new GameData(deck, dp, hands, playerName, numOfAI);
 
         //creates gui card layout
         gui.createCards(numOfAI, dp);
