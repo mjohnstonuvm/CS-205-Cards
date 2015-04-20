@@ -4,7 +4,7 @@ import java.util.Random;
 public class Deck extends CardObject {
 
 	protected CardObject.Card[] deck = new CardObject.Card[54];
-	protected int lastCard = 53;
+	protected int topOfDeck = 53;
 	public final int length = deck.length;
 
 	public Deck() {
@@ -31,40 +31,51 @@ public class Deck extends CardObject {
 		shuffle();
 	}
 
-	public CardObject.Card pop() {
-		CardObject.Card returnCard = null;
+	public Deck(DiscardPile dp) {
+		topOfDeck = 0;
+		
+		while (! dp.isEmpty()) {
+			deck[topOfDeck] = dp.pop();
+			topOfDeck++;
+		}
 
-		if (lastCard >= 0) {
-			returnCard = deck[lastCard];
-			deck[lastCard] = null;
-			lastCard--;
+		shuffle();
+	}
+
+	public CardObject.Card pop() {
+		CardObject.Card popped = null;
+
+		if (topOfDeck >= 0) {
+			popped = deck[topOfDeck];
+			deck[topOfDeck] = null;
+			topOfDeck--;
 		}
 		else {
 			System.out.println("Deck Pop: card could not be removed, out of bounds.");
 		}
 		
-		return returnCard;
+		return popped;
 
-	}
+	}// End of pop()
 
-	public void push(CardObject.Card returnedCard) {
-		if (lastCard < 53 && lastCard >= -1) {
-			lastCard++;
-			deck[lastCard] = returnedCard;
+	public void push(CardObject.Card pushed) {
+		if (topOfDeck < 53 && topOfDeck >= -1) {
+			topOfDeck++;
+			deck[topOfDeck] = pushed;
 		}
 		else {
 			System.out.println("Deck Push: card could not be added, out of bounds.");
 		}
-	}// End
+	}// End of push()
 
 	protected void shuffle() {
 		Random rand = new Random();
-		for (int i = 0; i < lastCard; i++) {
-			int j = rand.nextInt(lastCard + 1);
+		for (int i = 0; i < topOfDeck; i++) {
+			int j = rand.nextInt(topOfDeck + 1);
 			CardObject.Card temp = deck[j];
 			deck[j] = deck[i];
 			deck[i] = temp;
 		}
-	}
+	}// End of shuffle()
 
 }// End of Deck Class

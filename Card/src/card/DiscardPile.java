@@ -18,15 +18,24 @@ public class DiscardPile extends CardObject {
    /*
    method for adding a card to the discard pile
    */
-   public void add(Card cardDropped){
+   public void push(Card cardDropped){
       discardPile.push(cardDropped);
    }
    
    /*
    method for drawing a card from the discard pile
    */
-   public Card draw(){
-       return discardPile.pop();
+   public Card pop(){
+      Card popped;
+
+      if (discardPile.isEmpty()) {
+        popped = null;
+      }
+      else {
+        popped = discardPile.pop();
+      }
+
+      return popped;
    }
    
   /*
