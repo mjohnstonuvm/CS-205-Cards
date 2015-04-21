@@ -116,9 +116,9 @@ public class MediumAI extends AI {
                     highestvalue = hand[i];
                 }
             }
-            int d = rand.nextInt(4);
+            int d = rand.nextInt(numPlayers);
             while (d== playernum) {
-                d = rand.nextInt(4);
+                d = rand.nextInt(numPlayers);
             }
             a = new int[] {3, highestindex,  d, rand.nextInt(4)};
             hand[highestindex] = 5;
