@@ -155,7 +155,7 @@ public final class GuiClassTest  {
      method that lets the user peek at their 2 outer cards 
      */
 
-    public void userFirstTurn(GameData data) {
+    public void userInitialPeek(GameData data) {
         this.data = data;
         //deck or discard pile prompt
         String[] optionValues = new String[]{"Ok"};
@@ -475,7 +475,6 @@ public final class GuiClassTest  {
                 ButtonsArray[i].setVisible(true);
                 ButtonsArray[i].setEnabled(false);
             }
-            userTurn(data);
         }
     }; //END FlipCardsBack listener
 

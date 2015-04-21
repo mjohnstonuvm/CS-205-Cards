@@ -79,7 +79,7 @@ public class Game  {
         // GAME LOOP
         //end game options can go in the while loop
 
-        gui.userFirstTurn(data);
+        gui.userInitialPeek(data);
 
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
@@ -114,7 +114,7 @@ public class Game  {
     
     protected void opponentTurn(int oppNum) {
 
-        AI oppAI = ai.get(oppNum);
+        AI oppAI = ai.get(oppNum - 1);
         boolean drawDecision;
         Hand oppHand = data.hands.get(oppNum);
         int[] result;
@@ -197,7 +197,6 @@ public class Game  {
                 
             }
             scores[i] = hand.total();
-
         }
 
         return scores;
