@@ -109,7 +109,7 @@ public class Game  {
         }
 
         // End game statistics screen
-        //endScreen = new EndGame(playerName, difficulty, scores[0], win);
+        //endScreen = new EndGame(playerName, difficulty, scores[0]`, win);
 
     }// End of run()
     
