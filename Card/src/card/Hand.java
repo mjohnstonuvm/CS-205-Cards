@@ -1,7 +1,7 @@
 /*
  Created by Zach Chay-Dolan
  */
-package card;
+//package card;
 
 public class Hand extends CardObject{
 
@@ -43,18 +43,6 @@ public class Hand extends CardObject{
             total += this.cards[2].getNumber();
             total += this.cards[3].getNumber();
             return total;
-        }
-
-        /*
-        Replaces all power cards until number cards
-        */
-        public void replacePowerCards() {
-            for (int i = 0; i < 4; i++) {
-                while (this.cards[i].getType() != Type.NUMBER) {
-					//Draw a new card
-                    //Discard.discard(this.swap(Draw.draw(), i));
-                }
-            }
         }
 
         public static void main(String[] args) {

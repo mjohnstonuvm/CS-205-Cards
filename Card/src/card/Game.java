@@ -4,38 +4,32 @@ import java.util.ArrayList;
 
 public class Game extends CardObject {
 
-    static protected Deck deck;
-    static protected ArrayList<Hand> hands = new ArrayList<>();
-    static protected EasyAI ai;
-    static protected String endCondition, difficulty, name;
-    static protected DiscardPile dp = new DiscardPile();
-    static protected GuiClassTest gui = new GuiClassTest();
-    static public int roundCount = 0, counter = 0, index = 0;
-    static public boolean gameState = true, userTurnDone, op1TurnDone,
-            op2TurnDone, op3TurnDone, action, turnsDone = false;
-    static Card dpTop;
-    static Hand playerHand, aiHand;
+    protected ArrayList<AI> ai = new ArrayList<>();
+    protected GameData data;
+    protected GuiClassTest gui = new GuiClassTest();
+    protected String endCondition, difficulty, playerName;
+    public int roundCount = 0;
 
-    public Game(String endCondition, int numOfAI, String difficulty, String name) {
-        //creates a new deck
-        deck = new Deck();
-        //sets the end condition
+    public Game(String endCondition, int numOfAI, String difficulty, String playerName) {
+        
+        Deck deck = new Deck();
+        ArrayList<Hand> hands = new ArrayList<>();
+        Card dpTop;
+        DiscardPile dp = new DiscardPile();
+        
         this.endCondition = endCondition;
-        //sets the difficult
         this.difficulty = difficulty;
-        //sets the name
-        this.name = name;
+        this.playerName = playerName;
 
-        //sets the easy ai
-        ai = new EasyAI(numOfAI+1);
+        //creates the user hand
+        hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
         //deals hands to players
-        for (int i = 0; i < numOfAI + 1; i++) {
+        for (int i = 0; i < numOfAI; i++) {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
+            ai.add(new AI(difficulty, i + 1));
         }
-        //creates the user hand
-        playerHand = new Hand(hands.get(0).peek(0), hands.get(0).peek(1), hands.get(0).peek(2), hands.get(0).peek(3));
-        
+
         //pops a card from the deck
         dpTop = deck.pop();
 
@@ -46,70 +40,141 @@ public class Game extends CardObject {
         }
 
         //add to discard pile
-        dp.add(dpTop);
+        dp.pop(dpTop);
+
+        data = new GameData(deck, dp, hands, playerName, numOfAI);
 
         //creates gui card layout
         gui.createCards(numOfAI, dp);
-        run(true, false, false, false, false);
+
+        run(true);
 
     }// End of Game constructor
+    
+    public void run(boolean gameState) {
 
-    public static void run(boolean gameState, boolean userTurnDone, boolean op1TurnDone,
-            boolean op2TurnDone, boolean op3TurnDone) {
+        boolean win = true;
+        int[] scores;
+        EndGame endScreen;
 
         // GAME LOOP
         //end game options can go in the while loop
-        while (gameState && roundCount < 10) {
-            System.out.println("Round # : " + roundCount);
-            for (int i = 0; i < hands.size(); i++) {
+        while (roundCount < 10) {
+            System.out.println("Round " + roundCount);
+            for (int i = 0; i < data.hands.size(); i++) {
                 // Player's Turn
-                if (i == 0 && userTurnDone != true && op1TurnDone == false
-                        && op2TurnDone == false && op3TurnDone == false) {
+                if (i == 0) {
                     gameState = false;
-                    //passes the hand and the round number to the gui
-                    gui.UserTurn(playerHand, roundCount);
+                    //passes the game data to gui for user's turn
+                    data = gui.userTurn(data);
                 }
-                if (i > 0 && userTurnDone == true) {
-                    //loop thru opponents hands
-                    for (int op = 1; op < hands.size(); op++) {
-                        //waits for the user input
-                            //gets AI hand
-                            aiHand = new Hand(hands.get(op).peek(0), hands.get(op).peek(1), hands.get(op).peek(2), hands.get(op).peek(3));
-                            if (op1TurnDone != true && op == 1) {
-                                //if discard pile is not empty
-                                if (!dp.discardPile.isEmpty()) {
-                                    Card dpPeek = dp.draw(); //draws from discard pile
-                                    action = ai.DrawOrDiscard(dpPeek); //returns action
-                                } else {
-                                    action = ai.DrawOrDiscard(); //returns true if discardpile is empty
-                                }
-                                gui.opponentTurn(aiHand, action, op); //method for the ai to make a move
-                            }
-                            if (op2TurnDone != true && op == 2) {
-                                op2TurnDone = true;
-                                gui.opponentTurn(aiHand, action, op); //method for the ai to make a move
-                            }
-                            if (op3TurnDone != true && op == 3) {
-                                op3TurnDone = true;
-                                gui.opponentTurn(aiHand, action, op); //method for the ai to make a move
-                            }
-                        //userTurnDone = false;
-                    }//end of inner for loop
-                    userTurnDone = false;
-                    op1TurnDone = false;
-                    op2TurnDone = false;
-                    op3TurnDone = false;
-                    gameState = true;
-                    turnsDone = true;
-                }//end if
+                else {
+                    opponentTurn(i);
+                }
+            }
+            if (roundCount == 0) {
+                data.firstRound = false;
+            }
+            roundCount++; 
+        }
+        
+        scores = calculateScores();
 
-            }//end of outer for loop
-            if (turnsDone == true) {
-                roundCount++;
-                turnsDone = false;
+        for (int i = 1; i < scores.length; i++) {
+            if (scores[i] > scores[0]) {
+                win = false;
             }
         }
 
+        // End game statistics
+        // needs player name, difficulty, score
+        endScreen = new EndGame(playerName, difficulty, scores[0], win);
+
     }// End of run()
+    
+    protected void opponentTurn(int oppNum) {
+        boolean drawDecision;
+        Hand oppHand = data.hands.get(oppNum);
+        int[] result;
+        String fileName = "";
+        //if discard pile is not empty
+        Card selectedCard = data.dp.push(); //draws from discard pile
+        drawDecision = ai.DrawOrDiscard(selectedCard); //returns action
+        
+        if (drawDecision) {
+            selectedCard = data.deckPop();
+            while(selectedCard.getType() == Type.DRAW2) {
+                data.dp.pop(selectedCard);
+                selectedCard = data.deckPop();
+            }
+            result = ai.CardDraw(selectedCard);
+        }
+        else {
+            result = ai.CardDraw(selectedCard);
+        }
+
+        // update model with result and selectedCard
+        // produce fileNames to send to gui
+        // result[0] == 0: when the AI wants to discard the card that was drawn
+        // result[0] == 2: when the AI wants uses a peek card, effectly does nothing
+        if (result[0] == 0 || result[0] == 2) {
+            data.dp.pop(selectedCard);
+            fileName = selectedCard.getCard();
+        }
+        // result[0] == 1: when the AI wants to exchange a card in its hand with the one drawn
+        else if (result[0] == 1) {
+            Card toDiscard = oppHand.swap(selectedCard, result[1]);
+            data.dp.pop(toDiscard);
+            fileName = toDiscard.getCard();
+        }
+        // result[0] == 3: when the AI uses a swap card to swap cards with another player
+        else if (result[0] == 3) {
+            // Swap cards between opponent and other player
+            Hand otherHand = data.hands.get(result[2]);
+            Card otherCard = otherHand.swap(oppHand.peek(result[1]), result[3]);
+            otherCard = oppHand.swap(otherHand.peek(result[3]), result[1]);
+            otherCard = null;
+            // Update the hand that the opponent swapped cards with
+            data.hands.set(result[2], otherHand);
+            fileName = selectedCard.getCard();
+        }
+        // else, say an error occurred
+        else {
+            System.out.println("Game.java Error: AI result not in the correct format "
+                    + "result[0] should be an int from 0 to 3");
+        }
+        // Update opponent hand after turn is complete
+        data.hands.set(oppNum, oppHand);
+        // Update gui with changes made during turn
+        gui.opponentTurn(fileName);
+
+    }// End of opponentTurn()
+
+    protected int[] calculateScores() {
+
+        Card popped;
+        Hand hand;
+        int[] scores = new Integer(data.hands.size());
+
+        for (int i = 0; i < data.hands.size(); i++) {
+
+            hand = data.hands.get(i);
+
+            // Calculate score for hand
+            for (int j = 0; j < 4; j++) {
+                popped = hand.pop();
+                // Replace power card in hand with number card
+                // as per the official rules
+                while (popped != Type.NUMBER) {
+                    popped = data.deckPop();
+                }
+                scores[i] += popped.getNumber();
+            }
+
+        }
+
+        return scores;
+
+    }// End of calculateScores()
 
 }// End of Game Class
