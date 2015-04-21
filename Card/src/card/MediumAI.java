@@ -30,7 +30,7 @@ public class MediumAI extends AI {
        hand[3] = ownhand[3];
     }
 
-    public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
+    public boolean drawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
         //true means Draw pile false means discard pile
           int highestindex = 0;
             int highestvalue = hand[0];
@@ -49,11 +49,11 @@ public class MediumAI extends AI {
         }
     }
 
-    public boolean DrawOrDiscard() {
+    public boolean drawOrDiscard() {
         return true;
     }
 
-    public void Update(ArrayList<Hand> handsin) {
+    public void update(ArrayList<Hand> handsin) {
         hands = handsin;
           Hand h  = handsin.get(playernum);
           ownhand[0] = h.peek(0).getNumber();
@@ -62,7 +62,7 @@ public class MediumAI extends AI {
        ownhand[3] = h.peek(3).getNumber();
     }
 
-    public int[] CardDraw(Card drawnCard) {
+    public int[] cardDraw(Card drawnCard) {
         int[] a = {};
         if (drawnCard.getType() == Card.Type.NUMBER) {
            // int c = rand.nextInt(2); // first part of the array is if it should be discarded or put into the hand
@@ -135,21 +135,21 @@ public class MediumAI extends AI {
         MediumAI a = new MediumAI(3, b, f);
         //WORKS
         Card c = new Card(9);
-        System.out.println(Arrays.toString(a.CardDraw(c)));
-        System.out.println(a.DrawOrDiscard(c));
+        System.out.println(Arrays.toString(a.cardDraw(c)));
+        System.out.println(a.drawOrDiscard(c));
         
         //doesnt work
         Card g = new Card(4);
-        System.out.println(Arrays.toString(a.CardDraw(g)));
-        System.out.println(a.DrawOrDiscard(g));
+        System.out.println(Arrays.toString(a.cardDraw(g)));
+        System.out.println(a.drawOrDiscard(g));
 
         Card d = new Card(Type.PEEK);
-        System.out.println(Arrays.toString(a.CardDraw(d)));
-        System.out.println(a.DrawOrDiscard(d));
+        System.out.println(Arrays.toString(a.cardDraw(d)));
+        System.out.println(a.drawOrDiscard(d));
         //doesnt work
         Card e = new Card(Type.SWAP);
-        System.out.println(Arrays.toString(a.CardDraw(e)));
-        System.out.println(a.DrawOrDiscard(e));
+        System.out.println(Arrays.toString(a.cardDraw(e)));
+        System.out.println(a.drawOrDiscard(e));
     }
     */
 }

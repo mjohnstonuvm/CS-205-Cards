@@ -13,20 +13,20 @@ public class AI {
         numPlayers = players;
     }
 
-    public boolean DrawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
+    public boolean drawOrDiscard(Card dis) { //takes as a parameter the top of the discard pile
         return true;
     }
 
-     public boolean DrawOrDiscard() {
+     public boolean drawOrDiscard() {
         return true;
     }
 
-    public int[] CardDraw(Card drawnCard) {
+    public int[] cardDraw(Card drawnCard) {
         int[] a = {};     
         return a;
 
     }
-    public void Update(ArrayList<Hand> handsin) {
+    public void update(ArrayList<Hand> handsin) {
         return;
     }
 /*
@@ -34,17 +34,17 @@ public class AI {
         AI a = new EasyAI(3);
         //WORKS
         Card c = new Card(9);
-        System.out.println(Arrays.toString(a.CardDraw(c)));
-        System.out.println(a.DrawOrDiscard(c));
+        System.out.println(Arrays.toString(a.cardDraw(c)));
+        System.out.println(a.drawOrDiscard(c));
         
         //works
         Card d = new Card(Type.PEEK);
-        System.out.println(Arrays.toString(a.CardDraw(d)));
-        System.out.println(a.DrawOrDiscard(d));
+        System.out.println(Arrays.toString(a.cardDraw(d)));
+        System.out.println(a.drawOrDiscard(d));
         //works
         Card e = new Card(Type.SWAP);
-        System.out.println(Arrays.toString(a.CardDraw(e)));
-        System.out.println(a.DrawOrDiscard(e));
+        System.out.println(Arrays.toString(a.cardDraw(e)));
+        System.out.println(a.drawOrDiscard(e));
     }
     */
 }
