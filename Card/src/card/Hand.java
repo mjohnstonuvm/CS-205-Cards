@@ -37,7 +37,6 @@ public class Hand extends CardObject{
         Totals up the card values after replacing all power cards
         */
         public int total() {
-            this.replacePowerCards();
             int total = this.cards[0].getNumber();
             total += this.cards[1].getNumber();
             total += this.cards[2].getNumber();

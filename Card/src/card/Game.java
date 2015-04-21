@@ -1,8 +1,8 @@
-package card;
+//package card;
 
 import java.util.ArrayList;
 
-public class Game extends CardObject {
+public class Game extends CardObject{
 
     protected ArrayList<AI> ai = new ArrayList<>();
     protected GameData data;
@@ -24,10 +24,21 @@ public class Game extends CardObject {
         //creates the user hand
         hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
-        //deals hands to players
-        for (int i = 0; i < numOfAI; i++) {
+        //deals hands to AI
+         for (int i = 0; i < numOfAI; i++) {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
-            ai.add(new AI(difficulty, i + 1));
+        }
+        //Makes AI
+        for (int i = 0; i < numOfAI; i++) {        
+            if (difficulty == "Easy") {
+                ai.add(new EasyAI(numOfAI, i));
+            }
+            if (difficulty == "Medium") {
+                ai.add(new MediumAI(numOfAI, hands, i));
+            }
+            if (difficulty == "Hard") { 
+                ai.add(new HArdAI(numOfAI, hands, i));
+            }        
         }
 
         //pops a card from the deck
