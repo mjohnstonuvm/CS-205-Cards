@@ -12,13 +12,15 @@ public class GameData {
     public ArrayList<Hand> hands;
     public final String playerName;
     public final int numOfAI;
-
+    public boolean paused;
+    
     public GameData(Deck deck, DiscardPile dp, ArrayList<Hand> hands, String playerName, int numOfAI) {
         this.deck = deck;
         this.dp = dp;
         this.hands = hands;
         this.playerName = playerName;
         this.numOfAI = numOfAI;
+        this.paused = true;
         
     }// End of Constructor
 
