@@ -1,14 +1,14 @@
  /*
  Created by My Mai
  */
-//package card;
+package card;
 
 import java.util.*;
 
 /*
 Discard Pile Object implemented using a stack
 */
-public class DiscardPile extends CardObject {
+public class DiscardPile  {
 
    /*
     creating the stack
@@ -53,9 +53,9 @@ public class DiscardPile extends CardObject {
    
       DiscardPile aPile = new DiscardPile();
       Card b = new Card(2);
-      aPile.add(b);
+      aPile.push(b);
       aPile.peek();
-      Card newCard = aPile.draw();
+      Card newCard = aPile.pop();
    }//main
    
 }//DiscardPile

@@ -1,12 +1,12 @@
-//package card;
+package card;
 
 import java.util.ArrayList;
 
-public class Game extends CardObject{
+public class Game  {
 
-    protected ArrayList<AI> ai = new ArrayList<>();
+    protected EasyAI ai;
     protected GameData data;
-    protected GuiClassTest gui = new GuiClassTest();
+    protected GuiClassTest gui;
     protected String endCondition, difficulty, playerName;
     public int roundCount = 0;
 
@@ -16,45 +16,40 @@ public class Game extends CardObject{
         ArrayList<Hand> hands = new ArrayList<>();
         Card dpTop;
         DiscardPile dp = new DiscardPile();
-        
+        //sets the end condition
         this.endCondition = endCondition;
+        //sets the difficult
         this.difficulty = difficulty;
+        //sets the playerName
         this.playerName = playerName;
+        
+        //sets the easy ai
+        ai = new EasyAI(numOfAI,2);
 
         //creates the user hand
         hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
-        //deals hands to AI
-         for (int i = 0; i < numOfAI; i++) {
+        //deals hands to players
+        for (int i = 0; i < numOfAI; i++) {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
-        }
-        //Makes AI
-        for (int i = 0; i < numOfAI; i++) {        
-            if (difficulty == "Easy") {
-                ai.add(new EasyAI(numOfAI, i));
-            }
-            if (difficulty == "Medium") {
-                ai.add(new MediumAI(numOfAI, hands, i));
-            }
-            if (difficulty == "Hard") { 
-                ai.add(new HArdAI(numOfAI, hands, i));
-            }        
         }
 
         //pops a card from the deck
         dpTop = deck.pop();
 
         // AVOID INFINITE LOOP IF ALL CARDS ARE POWER CARDS
-        while (dpTop.getType() != Type.NUMBER) {
+        while (dpTop.getType() != Card.Type.NUMBER) {
             deck.push(dpTop);
             dpTop = deck.pop();
         }
 
         //add to discard pile
-        dp.pop(dpTop);
+        dp.push(dpTop);
 
         data = new GameData(deck, dp, hands, playerName, numOfAI);
-
+        
+        gui = new GuiClassTest(data);
+        
         //creates gui card layout
         gui.createCards(numOfAI, dp);
 
@@ -64,14 +59,10 @@ public class Game extends CardObject{
     
     public void run(boolean gameState) {
 
-        boolean win = true;
-        int[] scores;
-        EndGame endScreen;
-
         // GAME LOOP
         //end game options can go in the while loop
-        while (roundCount < 10) {
-            System.out.println("Round " + roundCount);
+        while (gameState && roundCount < 10) {
+            System.out.println("Round # : " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
                 // Player's Turn
                 if (i == 0) {
@@ -80,7 +71,7 @@ public class Game extends CardObject{
                     data = gui.userTurn(data);
                 }
                 else {
-                    opponentTurn(i);
+                    //opponentTurn(i);
                 }
             }
             if (roundCount == 0) {
@@ -88,18 +79,8 @@ public class Game extends CardObject{
             }
             roundCount++; 
         }
-        
-        scores = calculateScores();
-
-        for (int i = 1; i < scores.length; i++) {
-            if (scores[i] > scores[0]) {
-                win = false;
-            }
-        }
 
         // End game statistics
-        // needs player name, difficulty, score
-        endScreen = new EndGame(playerName, difficulty, scores[0], win);
 
     }// End of run()
     
@@ -109,13 +90,13 @@ public class Game extends CardObject{
         int[] result;
         String fileName = "";
         //if discard pile is not empty
-        Card selectedCard = data.dp.push(); //draws from discard pile
+        Card selectedCard = data.dp.pop(); //draws from discard pile
         drawDecision = ai.DrawOrDiscard(selectedCard); //returns action
         
         if (drawDecision) {
             selectedCard = data.deckPop();
-            while(selectedCard.getType() == Type.DRAW2) {
-                data.dp.pop(selectedCard);
+            while(selectedCard.getType() == Card.Type.DRAW2) {
+                data.dp.push(selectedCard);
                 selectedCard = data.deckPop();
             }
             result = ai.CardDraw(selectedCard);
@@ -129,13 +110,13 @@ public class Game extends CardObject{
         // result[0] == 0: when the AI wants to discard the card that was drawn
         // result[0] == 2: when the AI wants uses a peek card, effectly does nothing
         if (result[0] == 0 || result[0] == 2) {
-            data.dp.pop(selectedCard);
+            data.dp.push(selectedCard);
             fileName = selectedCard.getCard();
         }
         // result[0] == 1: when the AI wants to exchange a card in its hand with the one drawn
         else if (result[0] == 1) {
             Card toDiscard = oppHand.swap(selectedCard, result[1]);
-            data.dp.pop(toDiscard);
+            data.dp.push(toDiscard);
             fileName = toDiscard.getCard();
         }
         // result[0] == 3: when the AI uses a swap card to swap cards with another player
@@ -158,34 +139,6 @@ public class Game extends CardObject{
         data.hands.set(oppNum, oppHand);
         // Update gui with changes made during turn
         gui.opponentTurn(fileName);
-
     }// End of opponentTurn()
-
-    protected int[] calculateScores() {
-
-        Card popped;
-        Hand hand;
-        int[] scores = new Integer(data.hands.size());
-
-        for (int i = 0; i < data.hands.size(); i++) {
-
-            hand = data.hands.get(i);
-
-            // Calculate score for hand
-            for (int j = 0; j < 4; j++) {
-                popped = hand.pop();
-                // Replace power card in hand with number card
-                // as per the official rules
-                while (popped != Type.NUMBER) {
-                    popped = data.deckPop();
-                }
-                scores[i] += popped.getNumber();
-            }
-
-        }
-
-        return scores;
-
-    }// End of calculateScores()
 
 }// End of Game Class

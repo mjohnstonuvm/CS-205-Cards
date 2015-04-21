@@ -1,8 +1,10 @@
+package card;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
 
-public class AI extends CardObject {
+public class AI {
 
     private final int numPlayers;
 

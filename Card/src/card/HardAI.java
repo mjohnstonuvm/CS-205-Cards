@@ -1,4 +1,4 @@
-//package card;
+package card;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -35,7 +35,7 @@ public class HardAI extends AI {
                 }
             }
 
-        if (dis.getNumber() <= 5 && dis.getType() == Type.NUMBER && dis.getNumber() < highestvalue) { // if the discard has a less than 5 than use it to swap with your hand
+        if (dis.getNumber() <= 5 && dis.getType() == Card.Type.NUMBER && dis.getNumber() < highestvalue) { // if the discard has a less than 5 than use it to swap with your hand
             return false;
 
         } else {
@@ -59,7 +59,7 @@ public class HardAI extends AI {
 
     public int[] CardDraw(Card drawnCard) {
         int[] a = {};
-        if (drawnCard.getType() == Type.NUMBER) {
+        if (drawnCard.getType() == Card.Type.NUMBER) {
            // int c = rand.nextInt(2); // first part of the array is if it should be discarded or put into the hand
            // a = new int[]{c, rand.nextInt(4)}; //second part of the array is which hand part it should be put in
            // return a;
@@ -84,11 +84,11 @@ public class HardAI extends AI {
                 return a;
             }
 
-        } else if (drawnCard.getType() == Type.PEEK) {
+        } else if (drawnCard.getType() == Card.Type.PEEK) {
                     a = new int[] {0, 0};
                     return a;
             }
-         else if (drawnCard.getType() == Type.SWAP) {
+         else if (drawnCard.getType() == Card.Type.SWAP) {
            // int c = rand.nextInt(2); //first part of the array is whether or not to use the swap card
             //a = new int[]{c, rand.nextInt(4), rand.nextInt((numPlayers - 1) * 4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             //return a;
@@ -108,7 +108,7 @@ public class HardAI extends AI {
             for (int i = 0; i < 4; i++) {
                 Hand f = hands.get(i);
                 for (int j= 0; j < 4; j++ ) {
-                    if (f.peek(j).getNumber() < lowestvalue && f.peek(j).getType() == Type.NUMBER) {
+                    if (f.peek(j).getNumber() < lowestvalue && f.peek(j).getType() == Card.Type.NUMBER) {
                         lowestplayer = i;
                         lowestindex = j;
                         lowestvalue = f.peek(j).getNumber();

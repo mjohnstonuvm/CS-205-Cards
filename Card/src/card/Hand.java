@@ -1,11 +1,13 @@
 /*
  Created by Zach Chay-Dolan
  */
-//package card;
+package card;
 
-public class Hand extends CardObject{
+import java.util.Arrays;
 
-        private final Card[] cards = new Card[4];
+public class Hand {
+
+        private  Card[] cards = new Card[4];
 
         /*
         constructor for the Hand
@@ -16,13 +18,17 @@ public class Hand extends CardObject{
             this.cards[2] = card3;
             this.cards[3] = card4;
         }
-
         /*
         allows you to peek at a card 
         */
         public Card peek(int index) {
             return this.cards[index];
         }
+
+    @Override
+    public String toString() {
+        return "Hand{" + "cards=" + Arrays.toString(cards) + '}';
+    }
 
         /*
         allows to swap a card NOTE: index is offset by 1
@@ -37,6 +43,7 @@ public class Hand extends CardObject{
         Totals up the card values after replacing all power cards
         */
         public int total() {
+            this.replacePowerCards();
             int total = this.cards[0].getNumber();
             total += this.cards[1].getNumber();
             total += this.cards[2].getNumber();
@@ -44,24 +51,16 @@ public class Hand extends CardObject{
             return total;
         }
 
-        public static void main(String[] args) {
-            Card c = new Card(2);
-            Card x = new Card(Type.DRAW2);
-            Card d = new Card(8); //second card
-            Card e = new Card(Type.PEEK);
-            Card f = new Card(Type.SWAP); //first card
-            Card g = new Card(9);// third card
-            Card h = new Card(1); //fourth card
-
-            Hand a = new Hand(c, d, g, h);
-            System.out.println("The total is " + a.total()); //should be 20
-            System.out.println("Swapping in a power card");
-            a.swap(f, 0);
-            System.out.println("The first card is:" + a.peek(0));
-            System.out.println("The second card is:" + a.peek(1));
-            System.out.println("The third card is:" + a.peek(2));
-            System.out.println("The fourth card is:" + a.peek(3));
-
+        /*
+        Replaces all power cards until number cards
+        */
+        public void replacePowerCards() {
+            for (int i = 0; i < 4; i++) {
+                while (this.cards[i].getType() != Card.Type.NUMBER) {
+					//Draw a new card
+                    //Discard.discard(this.swap(Draw.draw(), i));
+                }
+            }
         }
 
 
