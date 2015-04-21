@@ -476,7 +476,6 @@ public final class GuiClassTest  {
                 cardToShow.setVisible(false);
                 ButtonsArray[i].setVisible(true);
                 ButtonsArray[i].setEnabled(false);
-                data.firstRound = false;
             }
             userTurn(data);
         }

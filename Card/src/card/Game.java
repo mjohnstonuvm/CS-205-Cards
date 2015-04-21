@@ -29,6 +29,7 @@ public class Game  {
 
         // Creates the AI hands and the AI themselves
         for (int i = 0; i < numOfAI; i++) {
+            System.out.println("NumAI= " + numOfAI);
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));      
             
         }
@@ -40,7 +41,7 @@ public class Game  {
             else if (difficulty == "Medium") {
                 ai.add(new MediumAI(numOfAI, hands, i));
             }
-            else (difficulty == "Hard") { 
+            else { 
                 ai.add(new HardAI(numOfAI, hands, i));
             }        
         }
@@ -73,7 +74,7 @@ public class Game  {
 
         boolean win = true;
         int[] scores;
-        EndGame endScreen;
+        //EndGame endScreen;
 
         // GAME LOOP
         //end game options can go in the while loop
@@ -81,6 +82,8 @@ public class Game  {
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
+                System.out.println("Number of hands: " + data.hands.size());
+                System.out.println("iterator:" + i);
                 // Player's Turn
                 if (roundCount == 0 && i == 0) {
                     data = gui.userFirstTurn(data);
@@ -106,7 +109,7 @@ public class Game  {
         }
 
         // End game statistics screen
-        endScreen = new EndGame(playerName, difficulty, scores[0], win);
+        //endScreen = new EndGame(playerName, difficulty, scores[0], win);
 
     }// End of run()
     
@@ -178,7 +181,7 @@ public class Game  {
 
         Card popped;
         Hand hand;
-        int[] scores = new Integer(data.hands.size());
+        int[] scores = new int [data.hands.size()];
 
         for (int i = 0; i < data.hands.size(); i++) {
 
@@ -186,14 +189,15 @@ public class Game  {
 
             // Calculate score for hand
             for (int j = 0; j < 4; j++) {
-                popped = hand.pop();
+                popped = hand.peek(j);
                 // Replace power card in hand with number card
                 // as per the official rules
-                while (popped != Type.NUMBER) {
-                    popped = data.deckPop();
+                while (popped.getType() != Card.Type.NUMBER) {
+                    data.dp.push(hand.swap(data.deckPop(), j));
                 }
-                scores[i] += popped.getNumber();
+                
             }
+            scores[i] = hand.total();
 
         }
 

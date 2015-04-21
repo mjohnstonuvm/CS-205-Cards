@@ -19,7 +19,7 @@ public class GameData {
         this.hands = hands;
         this.playerName = playerName;
         this.numOfAI = numOfAI;
-        firstRound = true;
+        
     }// End of Constructor
 
     public Card deckPop() {
