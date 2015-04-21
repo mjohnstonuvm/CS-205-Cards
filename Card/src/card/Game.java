@@ -108,12 +108,12 @@ public class Game  {
         }
 
         // End game statistics screen
-        //endScreen = new EndGame(playerName, difficulty, scores[0]`, win);
+        endScreen = new EndGame(playerName, difficulty, scores[0], win);
 
     }// End of run()
     
     protected void opponentTurn(int oppNum) {
-        
+
         AI oppAI = ai.get(oppNum - 1);
         boolean drawDecision;
         Hand oppHand = data.hands.get(oppNum);
