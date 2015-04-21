@@ -23,8 +23,6 @@ public class Game  {
         //sets the playerName
         this.playerName = playerName;
         
-        //sets the easy ai
-        ai = new EasyAI(numOfAI,2);
 
         //creates the user hand
         hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
@@ -38,11 +36,11 @@ public class Game  {
             if (difficulty == "Easy") {
                 ai.add(new EasyAI(numOfAI, i));
             }
-            if (difficulty == "Medium") {
+            else if (difficulty == "Medium") {
                 ai.add(new MediumAI(numOfAI, hands, i));
             }
-            if (difficulty == "Hard") { 
-                ai.add(new HArdAI(numOfAI, hands, i));
+            else (difficulty == "Hard") { 
+                ai.add(new HardAI(numOfAI, hands, i));
             }        
         }
 
