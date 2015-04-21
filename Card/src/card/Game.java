@@ -69,7 +69,7 @@ public class Game  {
 
         boolean win = true;
         int[] scores;
-        //EndGame endScreen;
+        EndGame endScreen;
 
         // Forces user to look at their two outer cards before game begins
         gui.userInitialPeek(data);
@@ -102,7 +102,7 @@ public class Game  {
         }
 
         // End game statistics screen
-        endScreen = new EndGame(playerName, difficulty, scores[0], win);
+        endScreen = new EndGame(playerName, difficulty, scores, win);
 
     }// End of run()
     

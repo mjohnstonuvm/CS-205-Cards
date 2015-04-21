@@ -7,10 +7,10 @@ import javax.swing.*;
  */
 public class EndGame extends JFrame {
 
-    private String winnerS;
+    private String playerS;
     private String diff;
-    private int nAI;
-    private int trns;
+    private int score[];
+    private boolean winn;
 
     public JFrame getEndGame() {
 
@@ -23,16 +23,21 @@ public class EndGame extends JFrame {
         JLabel title = new JLabel("End-Game");
         title.setBounds(120, 0, 300, 50);
         endMenu.add(title);
-        JLabel winner = new JLabel("Winner: " + winnerS);
+        JLabel winner = new JLabel("Player: " + playerS);
         winner.setBounds(100, 100, 300, 50);
         endMenu.add(winner);
         JLabel difficult = new JLabel("Difficulty:" + diff);
         difficult.setBounds(100, 150, 300, 50);
         endMenu.add(difficult);
-        JLabel opp = new JLabel("Number of Opponents: " + nAI);
+        JLabel opp = new JLabel("Your score: " + score[0]);
         opp.setBounds(100, 200, 300, 50);
         endMenu.add(opp);
-        JLabel turn = new JLabel("Number of Turns: " + trns);
+        JLabel turn;
+        if (winn) {
+            turn = new JLabel("You won! ");
+        } else {
+            turn = new JLabel("You lost! ");
+        }
         turn.setBounds(100, 250, 300, 50);
         endMenu.add(turn);
         newGameButton.setBounds(100, 300, 150, 50);
@@ -57,11 +62,11 @@ public class EndGame extends JFrame {
         return endMenu;
     }
 
-    public void setEndGame(String win, String difficulty, int numAI, int turns) {
-        winnerS = win;
+    public EndGame(String player, String difficulty, int scores[], boolean win) {
+        playerS = player;
         diff = difficulty;
-        nAI = numAI;
-        trns = turns;
+        score = scores;
+        winn = win;
 
     }
 
@@ -73,9 +78,9 @@ public class EndGame extends JFrame {
     }
 
     public static void main(String[] args) {
-        EndGame end = new EndGame();
-        end.setEndGame("You", "Easy", 3, 20);
+       // EndGame end = new EndGame();
+        //end.setEndGame("You", "Easy", 3, 20);
 
-        end.getEndGame();
+        //end.getEndGame();
     }
 }
