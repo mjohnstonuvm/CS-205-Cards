@@ -22,29 +22,27 @@ public class Game  {
         this.difficulty = difficulty;
         //sets the playerName
         this.playerName = playerName;
-        
-        //sets the easy ai
-        ai = new EasyAI(numOfAI,2);
 
         //creates the user hand
         hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
-        //deals hands to players
+        // Creates the AI hands and the AI themselves
         for (int i = 0; i < numOfAI; i++) {
-            hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
+            hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));      
+            
         }
-        //Makes AI
-        for (int i = 0; i < numOfAI; i++) {        
+
+        for (int i = 0; i < numOfAI; i++) {
             if (difficulty == "Easy") {
                 ai.add(new EasyAI(numOfAI, i));
             }
-            if (difficulty == "Medium") {
+            else if (difficulty == "Medium") {
                 ai.add(new MediumAI(numOfAI, hands, i));
             }
-            if (difficulty == "Hard") { 
+            else (difficulty == "Hard") { 
                 ai.add(new HArdAI(numOfAI, hands, i));
-            }        
-        }
+            }
+        }      
 
         //pops a card from the deck
         dpTop = deck.pop();
@@ -71,39 +69,56 @@ public class Game  {
     
     public void run(boolean gameState) {
 
+        boolean win = true;
+        int[] scores;
+        EndGame endScreen;
+
         // GAME LOOP
         //end game options can go in the while loop
-        while (gameState && roundCount < 10) {
-            System.out.println("Round # : " + roundCount);
+
+        while (roundCount < 10) {
+            System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
                 // Player's Turn
-                if (i == 0) {
+                if (roundCount == 0 && i == 0) {
+                    data = gui.userFirstTurn(data);
+                }
+                else if (i == 0) {
                     gameState = false;
                     //passes the game data to gui for user's turn
                     data = gui.userTurn(data);
                 }
                 else {
-                    //opponentTurn(i);
+                    opponentTurn(i);
                 }
-            }
-            if (roundCount == 0) {
-                data.firstRound = false;
             }
             roundCount++; 
         }
 
-        // End game statistics
+        scores = calculateScores();
+
+        for (int i = 1; i < scores.length; i++) {
+            if (scores[i] > scores[0]) {
+                win = false;
+            }
+        }
+
+        // End game statistics screen
+        endScreen = new EndGame(playerName, difficulty, scores[0], win);
 
     }// End of run()
     
     protected void opponentTurn(int oppNum) {
+
+        AI oppAI = ai.get(oppNum);
         boolean drawDecision;
         Hand oppHand = data.hands.get(oppNum);
         int[] result;
         String fileName = "";
-        //if discard pile is not empty
         Card selectedCard = data.dp.pop(); //draws from discard pile
-        drawDecision = ai.DrawOrDiscard(selectedCard); //returns action
+
+        oppAI.update(data.hands);
+        drawDecision = oppAI.drawOrDiscard(selectedCard); //returns action
         
         if (drawDecision) {
             selectedCard = data.deckPop();
@@ -111,16 +126,18 @@ public class Game  {
                 data.dp.push(selectedCard);
                 selectedCard = data.deckPop();
             }
-            result = ai.CardDraw(selectedCard);
+            result = oppAI.cardDraw(selectedCard);
         }
         else {
-            result = ai.CardDraw(selectedCard);
+            result = oppAI.cardDraw(selectedCard);
         }
 
-        // update model with result and selectedCard
-        // produce fileNames to send to gui
-        // result[0] == 0: when the AI wants to discard the card that was drawn
-        // result[0] == 2: when the AI wants uses a peek card, effectly does nothing
+        /*
+            update model with result and selectedCard
+            produce fileNames to send to gui
+            result[0] == 0: when the AI wants to discard the card that was drawn
+            result[0] == 2: when the AI wants uses a peek card, effectly does nothing
+        */
         if (result[0] == 0 || result[0] == 2) {
             data.dp.push(selectedCard);
             fileName = selectedCard.getCard();
@@ -147,10 +164,39 @@ public class Game  {
             System.out.println("Game.java Error: AI result not in the correct format "
                     + "result[0] should be an int from 0 to 3");
         }
+
         // Update opponent hand after turn is complete
         data.hands.set(oppNum, oppHand);
         // Update gui with changes made during turn
         gui.opponentTurn(fileName);
+
     }// End of opponentTurn()
+
+    protected int[] calculateScores() {
+
+        Card popped;
+        Hand hand;
+        int[] scores = new Integer(data.hands.size());
+
+        for (int i = 0; i < data.hands.size(); i++) {
+
+            hand = data.hands.get(i);
+
+            // Calculate score for hand
+            for (int j = 0; j < 4; j++) {
+                popped = hand.pop();
+                // Replace power card in hand with number card
+                // as per the official rules
+                while (popped != Type.NUMBER) {
+                    popped = data.deckPop();
+                }
+                scores[i] += popped.getNumber();
+            }
+
+        }
+
+        return scores;
+
+    }// End of calculateScores()
 
 }// End of Game Class

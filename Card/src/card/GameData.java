@@ -12,7 +12,6 @@ public class GameData {
     public ArrayList<Hand> hands;
     public final String playerName;
     public final int numOfAI;
-    public boolean firstRound;
 
     public GameData(Deck deck, DiscardPile dp, ArrayList<Hand> hands, String playerName, int numOfAI) {
         this.deck = deck;
