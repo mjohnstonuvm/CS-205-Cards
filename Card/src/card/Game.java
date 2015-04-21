@@ -79,16 +79,15 @@ public class Game  {
         // GAME LOOP
         //end game options can go in the while loop
 
+        gui.userFirstTurn(data);
+
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
                 System.out.println("Number of hands: " + data.hands.size());
                 System.out.println("iterator:" + i);
                 // Player's Turn
-                if (roundCount == 0 && i == 0) {
-                    data = gui.userFirstTurn(data);
-                }
-                else if (i == 0) {
+                if (i == 0) {
                     gameState = false;
                     //passes the game data to gui for user's turn
                     data = gui.userTurn(data);
