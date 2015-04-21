@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Game extends CardObject {
 
-    protected EasyAI ai;
+    protected ArrayList<AI> ai = new ArrayList<>();
     protected GameData data;
     protected GuiClassTest gui = new GuiClassTest();
     protected String endCondition, difficulty, playerName;
@@ -16,14 +16,10 @@ public class Game extends CardObject {
         ArrayList<Hand> hands = new ArrayList<>();
         Card dpTop;
         DiscardPile dp = new DiscardPile();
-        //sets the end condition
+        
         this.endCondition = endCondition;
-        //sets the difficult
         this.difficulty = difficulty;
-        //sets the playerName
         this.playerName = playerName;
-        //sets the easy ai
-        ai = new EasyAI(numOfAI);
 
         //creates the user hand
         hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
@@ -31,6 +27,7 @@ public class Game extends CardObject {
         //deals hands to players
         for (int i = 0; i < numOfAI; i++) {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
+            ai.add(new AI(difficulty, i + 1));
         }
 
         //pops a card from the deck
@@ -43,7 +40,7 @@ public class Game extends CardObject {
         }
 
         //add to discard pile
-        dp.add(dpTop);
+        dp.pop(dpTop);
 
         data = new GameData(deck, dp, hands, playerName, numOfAI);
 
@@ -55,6 +52,10 @@ public class Game extends CardObject {
     }// End of Game constructor
     
     public void run(boolean gameState) {
+
+        boolean win;
+        int score;
+        EndGame endScreen;
 
         // GAME LOOP
         //end game options can go in the while loop
@@ -77,7 +78,17 @@ public class Game extends CardObject {
             roundCount++; 
         }
 
+        // Replace power cards in hands with number cards
+
+        // Calculate player score
+        for (int i = 0; i < data.hands.size(); i ++) {
+            
+        }
+
+
         // End game statistics
+        // needs player name, difficulty, score
+        endScreen = new EndGame(playerName, difficulty, score, win);
 
     }// End of run()
     
@@ -87,14 +98,14 @@ public class Game extends CardObject {
         int[] result;
         String fileName = "";
         //if discard pile is not empty
-        Card selectedCard = data.dp.draw(); //draws from discard pile
+        Card selectedCard = data.dp.push(); //draws from discard pile
         drawDecision = ai.DrawOrDiscard(selectedCard); //returns action
         
         if (drawDecision) {
-            selectedCard = data.deck.pop();
+            selectedCard = data.deckPop();
             while(selectedCard.getType() == Type.DRAW2) {
-                data.dp.add(selectedCard);
-                selectedCard = data.deck.pop();
+                data.dp.pop(selectedCard);
+                selectedCard = data.deckPop();
             }
             result = ai.CardDraw(selectedCard);
         }
@@ -107,13 +118,13 @@ public class Game extends CardObject {
         // result[0] == 0: when the AI wants to discard the card that was drawn
         // result[0] == 2: when the AI wants uses a peek card, effectly does nothing
         if (result[0] == 0 || result[0] == 2) {
-            data.dp.add(selectedCard);
+            data.dp.pop(selectedCard);
             fileName = selectedCard.getCard();
         }
         // result[0] == 1: when the AI wants to exchange a card in its hand with the one drawn
         else if (result[0] == 1) {
             Card toDiscard = oppHand.swap(selectedCard, result[1]);
-            data.dp.add(toDiscard);
+            data.dp.pop(toDiscard);
             fileName = toDiscard.getCard();
         }
         // result[0] == 3: when the AI uses a swap card to swap cards with another player

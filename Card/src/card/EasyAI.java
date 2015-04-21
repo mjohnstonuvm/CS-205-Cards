@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.ArrayList;
 
-public class EasyAI extends AI {
+public class EasyAI {
 
     private final int numPlayers;
 

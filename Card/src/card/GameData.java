@@ -5,7 +5,7 @@ package card;
 
 import java.util.ArrayList;
 
-public class GameData {
+public class GameData extends CardObject {
 	
 	private Deck deck;
 	public DiscardPile dp;
@@ -14,7 +14,7 @@ public class GameData {
     public int numOfAI;
 	public boolean firstRound;
 
-	public GameData(Deck deck, DiscardPile dp, ArrayList<Hand> hands, String playerName,int numOfAI) {
+	public GameData(Deck deck, DiscardPile dp, ArrayList<Hand> hands, String playerName, int numOfAI) {
 		this.deck = deck;
 		this.dp = dp;
 		this.hands = hands;
@@ -27,7 +27,7 @@ public class GameData {
 		Card popped = deck.pop();
 
 		// If no more cards in deck, use dp as new deck
-		if (popped = null) {
+		if (popped == null) {
 			deck = new Deck(dp);
 			dp = new DiscardPile();
 			dp.push(deck.pop());
@@ -35,10 +35,10 @@ public class GameData {
 		}
 
 		return popped;
-	}
+	}// End of deckPop()
 
 	public void deckPush(Card pushed) {
 		deck.push(pushed);
-	}
+	}// End of deckPush()
 
 }// End of GameData
