@@ -22,7 +22,7 @@ import javax.swing.Timer;
 /**
  * Class to represent card game as a UI
  */
-public final class GuiClassTest  {
+public final class GuiClassTest {
 
     //variables
     private JMenu fileMenu, helpMenu;
@@ -33,6 +33,7 @@ public final class GuiClassTest  {
             deckPanel, discardPanel, deckandDiscard;
     private JButton deckPic, discardPic, cardToShow, cardToShow2;
     private boolean AddToDiscard = false;
+    private volatile boolean userAction = false;
     private Card cardInDiscardPile, cardToDiscard;
     private Timer timer;
     private JLabel youLabel, opponent1Label, opponent2Label, opponent3Label;
@@ -42,7 +43,7 @@ public final class GuiClassTest  {
     protected DiscardPile dp;
     protected String playerName;
     protected ArrayList<Hand> hands;
-    protected int numOfAI;
+    protected int numOfAI, result;
 
     /*
      Constructor to assign GameData 
@@ -196,8 +197,8 @@ public final class GuiClassTest  {
         }
     }
 
-    public GameData userTurn(GameData data) {
-        this.data = data;
+    public void userTurn() {
+
         //deck or discard pile prompt
         String[] optionValues = new String[]{"Draw from Deck", "Draw from Discard Pile"};
         Object selectedValue = JOptionPane.showOptionDialog(null, data.playerName
@@ -205,8 +206,14 @@ public final class GuiClassTest  {
                 JOptionPane.QUESTION_MESSAGE, null,
                 optionValues, optionValues[0]);
         //result value -- option selected
-        int result = (Integer) selectedValue;
+        result = (Integer) selectedValue;
+        method();
+        //pauses the game for a certain # of seconds
+        //data is defined in waitTimer method
 
+    }// End of userTurn()
+
+    public GameData method() {
         //IF DRAW FROM DECK IS CHOSEN
         if (result == 0) {
             deckPic.setEnabled(true); //sets deck to enabled  
@@ -280,18 +287,8 @@ public final class GuiClassTest  {
                                 optionValues, optionValues[0]);
                         //if the user chose to draw 2 more cards
                         if ((Integer) selectedValue == 1) {
-                            //pop first card from deck
-                            Card firstCard = data.deckPop();
-                            //pop second card from the deck
-                            Card secondCard = data.deckPop();
-                            //create an array of 2 cards
-                            ArrayList<Card> drawnCards = new ArrayList<>();
-                            //adds 2 cards to the arraylist
-                            drawnCards.add(firstCard);
-                            drawnCards.add(secondCard);
                             //passes the swap card to be discarded as first param
-                            //passes the arraylist to the draw 2 function
-                            draw2(deckCard, drawnCards);
+                            draw2(deckCard);
                         } else {
                             //user decides to discard the draw 2 card, goes to discard pile 
                             cardToDiscard = deckCard;
@@ -338,15 +335,14 @@ public final class GuiClassTest  {
                         AddToDiscard = false;
                     }
                     discardPanel.revalidate();
-                    //deckPic.setEnabled(false); //sets deck to disabled
+                    deckPic.setEnabled(false); //sets deck to disabled
                     discardPic.setEnabled(false); //sets discard to disabled
 
                 }
             }); //action listener for deck pic
 
             //DRAW FROM DISCARD IS CHOSEN
-        }
-        else {
+        } else {
             discardPic.setEnabled(true); //sets discard to enabled
             //action listener that performs a swap with a card from the user hand
             //with the discard pile card.
@@ -371,22 +367,17 @@ public final class GuiClassTest  {
                     discardPanel.revalidate();
                     discardPic.setEnabled(false); //sets discard to disabled
                 }
+
             }); //action listener for discard pic
 
         }//end else
-
-        //pauses the game for a certain # of seconds
-        //data is defined in waitTimer method
         waitTimer();
-
-        //Return the game data
         return data;
-
-    }// End of userTurn()
-
+    }
     /*
      Method to perform swap using the cardToSwapIn to swap in your OWN hand
      */
+
     public void swapWithYourHand(Card cardToSwapIn) {
         //loop through user buttons to set them to clickable/enabled
         //user buttons are index  0 - 3
@@ -555,7 +546,7 @@ public final class GuiClassTest  {
      This method perfoms the draw 2 function passes in the draw 2 
      card to be discarded as param, and array of cards
      */
-    public void draw2(Card cardDiscarded, ArrayList<Card> drawnCards) {
+    public void draw2(Card cardDiscarded) {
         //uses draw 2 function to draw 2 more cards
         //discard the drawn draw 2 card
         JButton discardCard = new JButton(new ImageIcon(cardDiscarded.getCard()));
