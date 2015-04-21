@@ -23,7 +23,6 @@ public class Game  {
         //sets the playerName
         this.playerName = playerName;
 
-
         //creates the user hand
         hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
@@ -46,7 +45,6 @@ public class Game  {
             }        
         }
 
-
         //pops a card from the deck
         dpTop = deck.pop();
 
@@ -58,29 +56,24 @@ public class Game  {
 
         //add to discard pile
         dp.push(dpTop);
-
         data = new GameData(deck, dp, hands, playerName, numOfAI);
-        
         gui = new GuiClassTest(data);
-        
         //creates gui card layout
         gui.createCards(numOfAI, dp);
 
-        run(true);
+        run();
 
     }// End of Game constructor
     
-    public void run(boolean gameState) {
+    public void run() {
 
         boolean win = true;
         int[] scores;
         //EndGame endScreen;
 
-        // GAME LOOP
-        //end game options can go in the while loop
-
+        // Forces user to look at their two outer cards before game begins
         gui.userInitialPeek(data);
-
+        // GAME LOOP
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
@@ -88,9 +81,10 @@ public class Game  {
                 System.out.println("iterator:" + i);
                 // Player's Turn
                 if (i == 0) {
-                    gameState = false;
+                    data.paused = true;
                     //passes the game data to gui for user's turn
                     data = gui.userTurn(data);
+                    while(data.paused);
                 }
                 else {
                     opponentTurn(i);
