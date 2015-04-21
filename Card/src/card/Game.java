@@ -1,8 +1,8 @@
-package card;
+//package card;
 
 import java.util.ArrayList;
 
-public class Game extends CardObject {
+public class Game extends CardObject{
 
     protected ArrayList<AI> ai = new ArrayList<>();
     protected GameData data;
