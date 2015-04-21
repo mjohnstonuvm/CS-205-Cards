@@ -54,9 +54,9 @@ public class EasyAI extends AI{
             if (c == 1)  {
                 c = 3;
             }
-            int d = rand.nextInt(4);
+            int d = rand.nextInt(numPlayers);
             while (d== player) {
-                d = rand.nextInt(4);
+                d = rand.nextInt(numPlayers);
             }
             a = new int[]{c, rand.nextInt(4), d, rand.nextInt(4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
             return a;

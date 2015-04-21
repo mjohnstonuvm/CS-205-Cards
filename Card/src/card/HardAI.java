@@ -105,7 +105,7 @@ public class HardAI extends AI {
             int lowestplayer = 0;
             int lowestindex = 0;
             int lowestvalue = 9;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < numPlayers; i++) {
                 Hand f = hands.get(i);
                 for (int j= 0; j < 4; j++ ) {
                     if (f.peek(j).getNumber() < lowestvalue && f.peek(j).getType() == Card.Type.NUMBER) {

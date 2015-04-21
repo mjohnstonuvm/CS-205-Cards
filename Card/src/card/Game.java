@@ -114,7 +114,7 @@ public class Game  {
     
     protected void opponentTurn(int oppNum) {
 
-        AI oppAI = ai.get(oppNum);
+        AI oppAI = ai.get(oppNum-1);
         boolean drawDecision;
         Hand oppHand = data.hands.get(oppNum);
         int[] result;
