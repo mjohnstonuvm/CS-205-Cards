@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Game  {
 
-    protected EasyAI ai;
+    protected ArrayList<AI> ai = new ArrayList<>();
     protected GameData data;
     protected GuiClassTest gui;
     protected String endCondition, difficulty, playerName;
@@ -32,6 +32,18 @@ public class Game  {
         //deals hands to players
         for (int i = 0; i < numOfAI; i++) {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
+        }
+        //Makes AI
+        for (int i = 0; i < numOfAI; i++) {        
+            if (difficulty == "Easy") {
+                ai.add(new EasyAI(numOfAI, i));
+            }
+            if (difficulty == "Medium") {
+                ai.add(new MediumAI(numOfAI, hands, i));
+            }
+            if (difficulty == "Hard") { 
+                ai.add(new HArdAI(numOfAI, hands, i));
+            }        
         }
 
         //pops a card from the deck
