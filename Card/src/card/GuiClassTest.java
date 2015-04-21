@@ -155,7 +155,8 @@ public final class GuiClassTest  {
      method that lets the user peek at their 2 outer cards 
      */
 
-    public void userFirstTurn() {
+    public GameData userFirstTurn(GameData data) {
+        this.data = data;
         //deck or discard pile prompt
         String[] optionValues = new String[]{"Ok"};
         Object selectedValue = JOptionPane.showOptionDialog(null, "Welcome " + data.playerName
@@ -193,198 +194,197 @@ public final class GuiClassTest  {
             timer.start();
 
         }
+
+        return data;
     }
 
     public GameData userTurn(GameData data) {
         this.data = data;
-        //if it is the users first round, peek at 2 outer cards
-        if (data.firstRound) {
-            userFirstTurn();
-        } else {
-            //deck or discard pile prompt
-            String[] optionValues = new String[]{"Draw from Deck", "Draw from Discard Pile"};
-            Object selectedValue = JOptionPane.showOptionDialog(null, data.playerName
-                    + ", do you want to draw from the DECK or DISCARD Pile?", "DRAW", JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null,
-                    optionValues, optionValues[0]);
-            //result value -- option selected
-            int result = (Integer) selectedValue;
+        //deck or discard pile prompt
+        String[] optionValues = new String[]{"Draw from Deck", "Draw from Discard Pile"};
+        Object selectedValue = JOptionPane.showOptionDialog(null, data.playerName
+                + ", do you want to draw from the DECK or DISCARD Pile?", "DRAW", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null,
+                optionValues, optionValues[0]);
+        //result value -- option selected
+        int result = (Integer) selectedValue;
 
-            //IF DRAW FROM DECK IS CHOSEN
-            if (result == 0) {
-                deckPic.setEnabled(true); //sets deck to enabled  
-                //deck listener that performs a different action depending on type of card
-                deckPic.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        //pop card from the deck
-                        Card deckCard = data.deckPop();
-                        //gets icon of the drawn card
-                        ImageIcon icon = new ImageIcon(deckCard.getCard());
-                        String[] optionValues = {}; //hodls the options for the specific card
-                        Object selectedValue; //selected value from prompt
+        //IF DRAW FROM DECK IS CHOSEN
+        if (result == 0) {
+            deckPic.setEnabled(true); //sets deck to enabled  
+            //deck listener that performs a different action depending on type of card
+            deckPic.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    //pop card from the deck
+                    Card deckCard = data.deckPop();
+                    //gets icon of the drawn card
+                    ImageIcon icon = new ImageIcon(deckCard.getCard());
+                    String[] optionValues = {}; //hodls the options for the specific card
+                    Object selectedValue; //selected value from prompt
 
                     //if a number card is drawn
-                        //user can either swap the card with 1 from their hand, 
-                        //then discard the swaped card
-                        //OR chose to discard the drawn card
-                        if (deckCard.getType() == Card.Type.NUMBER) {
-                            //number card options
-                            optionValues = new String[]{"Add to Discard Pile", "Swap with 1 of your cards"};
-                            selectedValue = JOptionPane.showOptionDialog(null, "You drew a number card,"
-                                    + " do you want to discard it, "
-                                    + "or swap it with one of yours?", "NUMBER CARD", JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.QUESTION_MESSAGE, icon,
-                                    optionValues, optionValues[0]);
-                            //if the user chose to add the card to discard pile
-                            if ((Integer) selectedValue == 0) {
-                                cardToDiscard = deckCard;
-                                AddToDiscard = true;
-                            } else {
-                                //boolean is true if number card is used
-                                drawnCardUsed = true;
+                    //user can either swap the card with 1 from their hand, 
+                    //then discard the swaped card
+                    //OR chose to discard the drawn card
+                    if (deckCard.getType() == Card.Type.NUMBER) {
+                        //number card options
+                        optionValues = new String[]{"Add to Discard Pile", "Swap with 1 of your cards"};
+                        selectedValue = JOptionPane.showOptionDialog(null, "You drew a number card,"
+                                + " do you want to discard it, "
+                                + "or swap it with one of yours?", "NUMBER CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+                        //if the user chose to add the card to discard pile
+                        if ((Integer) selectedValue == 0) {
+                            cardToDiscard = deckCard;
+                            AddToDiscard = true;
+                        } else {
+                            //boolean is true if number card is used
+                            drawnCardUsed = true;
                             //peform swap using swapWithyourHand function
-                                //returns the global variable with the card to discard
-                                swapWithYourHand(deckCard);
-                            }
-                        } //end if number card is drawn
-                        //if a peek card is drawn
-                        //user can peek at any of their cards
-                        else if (deckCard.getType() == Card.Type.PEEK) {
-                            //peek card options
-                            optionValues = new String[]{"Add to Discard Pile", "Peek 1 of your cards"};
-                            selectedValue = JOptionPane.showOptionDialog(null, "You drew a peek card,"
-                                    + " do you want to discard it, "
-                                    + "or peek at one of your cards?", "PEEK CARD", JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.QUESTION_MESSAGE, icon,
-                                    optionValues, optionValues[0]);
-                            //if the user chose to peek a card
-                            if ((Integer) selectedValue == 1) {
-                                //boolean is true if peek card is used
-                                drawnCardUsed = true;
-                                //uses peek function to show card to user
-                                peek(deckCard);
-                            }
-                            //peek card goes to discard pile 
-                            cardToDiscard = deckCard;
-                            AddToDiscard = true;
-                        } //end else if peek
-                        //if draw 2 card is drawn
-                        //the user can either choose to use the first drawn card,
-                        //OR discard that card and draw another one
-                        //if either of the drawn cards are power cards, then use their function
-                        //if it is a draw2 card, then user has the option to draw 2 more
-                        else if (deckCard.getType() == Card.Type.DRAW2) {
-                            //draw2 card options
-                            optionValues = new String[]{"Add to Discard Pile", "Draw 2 more cards"};
-                            selectedValue = JOptionPane.showOptionDialog(null, "You drew a draw 2 card,"
-                                    + " do you want to discard it, "
-                                    + "or draw 2 more cards?", "DRAW 2 CARD", JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.QUESTION_MESSAGE, icon,
-                                    optionValues, optionValues[0]);
-                            //if the user chose to draw 2 more cards
-                            if ((Integer) selectedValue == 1) {
-                                //pop first card from deck
-                                Card firstCard = data.deckPop();
-                                //pop second card from the deck
-                                Card secondCard = data.deckPop();
-                                //create an array of 2 cards
-                                ArrayList<Card> drawnCards = new ArrayList<>();
-                                //adds 2 cards to the arraylist
-                                drawnCards.add(firstCard);
-                                drawnCards.add(secondCard);
+                            //returns the global variable with the card to discard
+                            swapWithYourHand(deckCard);
+                        }
+                    } //end if number card is drawn
+                    //if a peek card is drawn
+                    //user can peek at any of their cards
+                    else if (deckCard.getType() == Card.Type.PEEK) {
+                        //peek card options
+                        optionValues = new String[]{"Add to Discard Pile", "Peek 1 of your cards"};
+                        selectedValue = JOptionPane.showOptionDialog(null, "You drew a peek card,"
+                                + " do you want to discard it, "
+                                + "or peek at one of your cards?", "PEEK CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+                        //if the user chose to peek a card
+                        if ((Integer) selectedValue == 1) {
+                            //boolean is true if peek card is used
+                            drawnCardUsed = true;
+                            //uses peek function to show card to user
+                            peek(deckCard);
+                        }
+                        //peek card goes to discard pile 
+                        cardToDiscard = deckCard;
+                        AddToDiscard = true;
+                    } //end else if peek
+                    //if draw 2 card is drawn
+                    //the user can either choose to use the first drawn card,
+                    //OR discard that card and draw another one
+                    //if either of the drawn cards are power cards, then use their function
+                    //if it is a draw2 card, then user has the option to draw 2 more
+                    else if (deckCard.getType() == Card.Type.DRAW2) {
+                        //draw2 card options
+                        optionValues = new String[]{"Add to Discard Pile", "Draw 2 more cards"};
+                        selectedValue = JOptionPane.showOptionDialog(null, "You drew a draw 2 card,"
+                                + " do you want to discard it, "
+                                + "or draw 2 more cards?", "DRAW 2 CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+                        //if the user chose to draw 2 more cards
+                        if ((Integer) selectedValue == 1) {
+                            //pop first card from deck
+                            Card firstCard = data.deckPop();
+                            //pop second card from the deck
+                            Card secondCard = data.deckPop();
+                            //create an array of 2 cards
+                            ArrayList<Card> drawnCards = new ArrayList<>();
+                            //adds 2 cards to the arraylist
+                            drawnCards.add(firstCard);
+                            drawnCards.add(secondCard);
                             //passes the swap card to be discarded as first param
-                                //passes the arraylist to the draw 2 function
-                                draw2(deckCard, drawnCards);
-                            } else {
-                                //user decides to discard the draw 2 card, goes to discard pile 
-                                cardToDiscard = deckCard;
-                                AddToDiscard = true;
-                            }
-                        } //end draw 2 else if
-                        //if a swap card is drawn
-                        //the user can swap a card from their hand with any opponent card
-                        //user CANNOT see the cards they are swapping
-                        //swap card goes to disard pile
-                        else {
-                            //swap card options
-                            if (numOfAI == 1) {
-                                optionValues = new String[]{"Add to Discard Pile", "Opponent 1"};
-                            } else if (numOfAI == 2) {
-                                optionValues = new String[]{"Add to Discard Pile", "Opponent 1", "Opponent 2"};
-                            } else {
-                                optionValues = new String[]{"Add to Discard Pile", "Opponent 1", "Opponent 2", "Opponent 3"};
-                            }
-                            //user selected value
-                            selectedValue = JOptionPane.showOptionDialog(null, "You drew a swap card,"
-                                    + " do you want to discard it, "
-                                    + "or swap it with one of your oppoents cards?", "SWAP CARD", JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.QUESTION_MESSAGE, icon,
-                                    optionValues, optionValues[0]);
-                            //if the user chose to swap a card
-                            if ((Integer) selectedValue != 0) {
-                                //boolean is true if swap card is used
-                                drawnCardUsed = true;
-                                //uses swap function to swap a card from your hand with your opponents
-                                swapWithOpponent((Integer) selectedValue);
-                            }
-                            //swap card goes to discard pile 
+                            //passes the arraylist to the draw 2 function
+                            draw2(deckCard, drawnCards);
+                        } else {
+                            //user decides to discard the draw 2 card, goes to discard pile 
                             cardToDiscard = deckCard;
                             AddToDiscard = true;
-                        } // end swap card drawn else statement
-
-                        //once the function has been completed, add the card to discard pile
-                        while (AddToDiscard) {
-                            //creates a discarded card from the cardTodiscard given from each function
-                            JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
-                            discardPanel.removeAll();
-                            discardPanel.add(discardCard);
-                            AddToDiscard = false;
                         }
-                        discardPanel.revalidate();
-                        //deckPic.setEnabled(false); //sets deck to disabled
-                        discardPic.setEnabled(false); //sets discard to disabled
+                    } //end draw 2 else if
+                    //if a swap card is drawn
+                    //the user can swap a card from their hand with any opponent card
+                    //user CANNOT see the cards they are swapping
+                    //swap card goes to disard pile
+                    else {
+                        //swap card options
+                        if (numOfAI == 1) {
+                            optionValues = new String[]{"Add to Discard Pile", "Opponent 1"};
+                        } else if (numOfAI == 2) {
+                            optionValues = new String[]{"Add to Discard Pile", "Opponent 1", "Opponent 2"};
+                        } else {
+                            optionValues = new String[]{"Add to Discard Pile", "Opponent 1", "Opponent 2", "Opponent 3"};
+                        }
+                        //user selected value
+                        selectedValue = JOptionPane.showOptionDialog(null, "You drew a swap card,"
+                                + " do you want to discard it, "
+                                + "or swap it with one of your oppoents cards?", "SWAP CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+                        //if the user chose to swap a card
+                        if ((Integer) selectedValue != 0) {
+                            //boolean is true if swap card is used
+                            drawnCardUsed = true;
+                            //uses swap function to swap a card from your hand with your opponents
+                            swapWithOpponent((Integer) selectedValue);
+                        }
+                        //swap card goes to discard pile 
+                        cardToDiscard = deckCard;
+                        AddToDiscard = true;
+                    } // end swap card drawn else statement
 
+                    //once the function has been completed, add the card to discard pile
+                    while (AddToDiscard) {
+                        //creates a discarded card from the cardTodiscard given from each function
+                        JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
+                        discardPanel.removeAll();
+                        discardPanel.add(discardCard);
+                        AddToDiscard = false;
                     }
-                }); //action listener for deck pic
+                    discardPanel.revalidate();
+                    //deckPic.setEnabled(false); //sets deck to disabled
+                    discardPic.setEnabled(false); //sets discard to disabled
 
-                //DRAW FROM DISCARD IS CHOSEN
-            } else {
-                discardPic.setEnabled(true); //sets discard to enabled
-                //action listener that performs a swap with a card from the user hand
-                //with the discard pile card.
-                //card from hand is discarded
-                discardPic.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        cardInDiscardPile = data.dp.pop(); //takes from discard pile
-                        //prompt user, "Click on one of your cards to swap with"
-                        JOptionPane.showMessageDialog(gamePanel, "Click on one of your cards to swap this card with",
-                                "SWAP WITH YOURS", JOptionPane.PLAIN_MESSAGE);
+                }
+            }); //action listener for deck pic
+
+            //DRAW FROM DISCARD IS CHOSEN
+        }
+        else {
+            discardPic.setEnabled(true); //sets discard to enabled
+            //action listener that performs a swap with a card from the user hand
+            //with the discard pile card.
+            //card from hand is discarded
+            discardPic.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    cardInDiscardPile = data.dp.pop(); //takes from discard pile
+                    //prompt user, "Click on one of your cards to swap with"
+                    JOptionPane.showMessageDialog(gamePanel, "Click on one of your cards to swap this card with",
+                            "SWAP WITH YOURS", JOptionPane.PLAIN_MESSAGE);
                     //peform swap using swapWithyourHand function
-                        //returns the global variable with the card to discard
-                        swapWithYourHand(cardInDiscardPile);
+                    //returns the global variable with the card to discard
+                    swapWithYourHand(cardInDiscardPile);
                     //discard the swapped card to the discard pile
-                        //creates a discarded card from the cardTodiscard given from the cardToDiscard global variable
-                        while (AddToDiscard) {
-                            JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
-                            discardPanel.removeAll();
-                            discardPanel.add(discardCard);
-                            AddToDiscard = false;
-                        }
-                        discardPanel.revalidate();
-                        discardPic.setEnabled(false); //sets discard to disabled
+                    //creates a discarded card from the cardTodiscard given from the cardToDiscard global variable
+                    while (AddToDiscard) {
+                        JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
+                        discardPanel.removeAll();
+                        discardPanel.add(discardCard);
+                        AddToDiscard = false;
                     }
-                }); //action listener for discard pic
+                    discardPanel.revalidate();
+                    discardPic.setEnabled(false); //sets discard to disabled
+                }
+            }); //action listener for discard pic
 
-            }//end else
+        }//end else
 
         //pauses the game for a certain # of seconds
-            //data is defined in waitTimer method
-            waitTimer();
-        }
+        //data is defined in waitTimer method
+        waitTimer();
+
         //Return the game data
         return data;
 
-    } //end USERTURN and USER turn
+    }// End of userTurn()
 
     /*
      Method to perform swap using the cardToSwapIn to swap in your OWN hand
