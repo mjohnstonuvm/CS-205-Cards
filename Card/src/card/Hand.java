@@ -51,17 +51,4 @@ public class Hand {
             return total;
         }
 
-        /*
-        Replaces all power cards until number cards
-        */
-        public void replacePowerCards() {
-            for (int i = 0; i < 4; i++) {
-                while (this.cards[i].getType() != Card.Type.NUMBER) {
-					//Draw a new card
-                    //Discard.discard(this.swap(Draw.draw(), i));
-                }
-            }
-        }
-
-
 }
