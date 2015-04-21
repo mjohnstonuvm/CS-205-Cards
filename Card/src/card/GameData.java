@@ -10,8 +10,8 @@ public class GameData extends CardObject {
 	private Deck deck;
 	public DiscardPile dp;
 	public ArrayList<Hand> hands;
-	public String playerName;
-    public int numOfAI;
+	public final String playerName;
+    public final int numOfAI;
 	public boolean firstRound;
 
 	public GameData(Deck deck, DiscardPile dp, ArrayList<Hand> hands, String playerName, int numOfAI) {

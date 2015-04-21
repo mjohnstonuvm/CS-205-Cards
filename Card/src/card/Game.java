@@ -53,14 +53,14 @@ public class Game extends CardObject {
     
     public void run(boolean gameState) {
 
-        boolean win;
-        int score;
+        boolean win = true;
+        int[] scores;
         EndGame endScreen;
 
         // GAME LOOP
         //end game options can go in the while loop
-        while (gameState && roundCount < 10) {
-            System.out.println("Round # : " + roundCount);
+        while (roundCount < 10) {
+            System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
                 // Player's Turn
                 if (i == 0) {
@@ -77,18 +77,18 @@ public class Game extends CardObject {
             }
             roundCount++; 
         }
+        
+        scores = calculateScores();
 
-        // Replace power cards in hands with number cards
-
-        // Calculate player score
-        for (int i = 0; i < data.hands.size(); i ++) {
-            
+        for (int i = 1; i < scores.length; i++) {
+            if (scores[i] > scores[0]) {
+                win = false;
+            }
         }
-
 
         // End game statistics
         // needs player name, difficulty, score
-        endScreen = new EndGame(playerName, difficulty, score, win);
+        endScreen = new EndGame(playerName, difficulty, scores[0], win);
 
     }// End of run()
     
@@ -147,6 +147,34 @@ public class Game extends CardObject {
         data.hands.set(oppNum, oppHand);
         // Update gui with changes made during turn
         gui.opponentTurn(fileName);
+
     }// End of opponentTurn()
+
+    protected int[] calculateScores() {
+
+        Card popped;
+        Hand hand;
+        int[] scores = new Integer(data.hands.size());
+
+        for (int i = 0; i < data.hands.size(); i++) {
+
+            hand = data.hands.get(i);
+
+            // Calculate score for hand
+            for (int j = 0; j < 4; j++) {
+                popped = hand.pop();
+                // Replace power card in hand with number card
+                // as per the official rules
+                while (popped != Type.NUMBER) {
+                    popped = data.deckPop();
+                }
+                scores[i] += popped.getNumber();
+            }
+
+        }
+
+        return scores;
+
+    }// End of calculateScores()
 
 }// End of Game Class
