@@ -77,14 +77,16 @@ public class Game  {
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
-                System.out.println("Number of hands: " + data.hands.size());
-                System.out.println("iterator:" + i);
+               //System.out.println("Number of hands: " + data.hands.size());
+                //System.out.println("iterator:" + i);
                 // Player's Turn
                 if (i == 0) {
                     data.paused = true;
                     //passes the game data to gui for user's turn
-                    data = gui.userTurn(data);
-                    while(data.paused);
+                    gui.userTurn();
+                    //while(data.paused) {
+                      //  System.out.println("Is this infinite?");
+                    //};
                 }
                 else {
                     opponentTurn(i);
