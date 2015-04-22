@@ -9,10 +9,11 @@ import java.util.ArrayList;
 public class Game {
 
     protected ArrayList<Player> players = new ArrayList<>();
-    protected GameData data;
-    protected GuiClassTest gui;
+    protected int playerIndex;
+    protected int roundCount = 0;
     protected String endCondition, difficulty, playerName;
-    public int roundCount = 0;
+    protected Player currentPlayer;
+    public GameData data;
 
     public Game(String endCondition, int numOfAI, String difficulty, String playerName) {
 
@@ -54,13 +55,15 @@ public class Game {
 
         for (int i = 0; i < numOfAI; i++) {
             if (difficulty == "Easy") {
-                players.add(new Player(new AI(new EasyAI(numOfAI, i))));
+                players.add(new Player(new EasyAI(numOfAI, i)));
             } else if (difficulty == "Medium") {
-                players.add(new Player(new AI(new MediumAI(numOfAI, hands, i))));
+                players.add(new Player(new MediumAI(numOfAI, hands, i)));
             } else {
-                players.add(new Player(new AI(new HardAI(numOfAI, hands, i))));
+                players.add(new Player(new HardAI(numOfAI, hands, i)));
             }
         }
+
+        playerIndex = 0;
 
         turn();
 
@@ -68,6 +71,7 @@ public class Game {
 
     public void endGame() {
 
+        boolean win = true;
         Card card;
         Hand hand;
         int[] scores = new int[data.hands.size()];
@@ -81,7 +85,7 @@ public class Game {
                 card = hand.peek(j);
                 // Replace power card in hand with number card
                 // as per the official rules
-                if(card.getType != Card.Type.NUMBER) {
+                if(card.getType() != Card.Type.NUMBER) {
                     while (card.getType() != Card.Type.NUMBER) {
                         card = data.deckPop();
                     }
@@ -104,8 +108,14 @@ public class Game {
     }// End of endGame()
 
     public void endTurn() {
-        currentPlayer = players.get((playerIndex + 1) % player.size());
-        if (endCondition) {
+        int nextPlayerIndex = (playerIndex + 1) % players.size();
+
+        if (nextPlayerIndex == 0) {
+            roundCount++;
+        }
+
+        currentPlayer = players.get(nextPlayerIndex);
+        if (roundCount < 10) {
             endGame();
         }
         else {

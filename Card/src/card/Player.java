@@ -9,15 +9,22 @@ public class Player {
 		isHuman = true;
 	}// End of Constructor 1
 
-	public Player(AI ai) {
-		isHuman = false;
-		this.ai = ai;
-	}// End of Constructor 2
+	public Player(EasyAI ai) {
+        this.ai = ai;
+    }
 
-	public GameData run(GameData data, playerIndex) {
+    public Player(MediumAI ai) {
+        this.ai = ai;
+    }
+
+    public Player(HardAI ai) {
+        this.ai = ai;
+    }
+
+	public GameData run(GameData data, int playerIndex) {
 
 		if (isHuman) {
-			return;
+			return data;
 		}
 		else {
 			opponentTurn(data, playerIndex);
@@ -27,9 +34,9 @@ public class Player {
 
 	}
 
-	protected void opponentTurn(GameData data, playerIndex) {
+	protected GameData opponentTurn(GameData data, int playerIndex) {
 
-		Hand oppHand = data.hands.get(playerIndex)
+		Hand oppHand = data.hands.get(playerIndex);
         boolean drawDecision;
         int[] result;
         Card selectedCard = data.dp.pop(); //draws from discard pile
@@ -76,7 +83,7 @@ public class Player {
         }
 
         // Update opponent hand after turn is complete
-        data.hands.set(oppNum, oppHand);
+        data.hands.set(playerIndex, oppHand);
 
         return data;
 

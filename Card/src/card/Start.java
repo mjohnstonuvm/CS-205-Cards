@@ -14,10 +14,10 @@ import javax.swing.*;
 /**
  * Class to represent card start menu as a UI
  */
-public class StartMenuTest extends JFrame {
+public class Start extends JFrame {
 
     //PlayClip c = new PlayClip("hp.au");
-    public Game g;
+    public Gui g;
     public int NUM_OPPONENTS;
     public String END_GAME, DIFFICULTY,NAME = "";
 
@@ -93,7 +93,7 @@ public class StartMenuTest extends JFrame {
                 NAME = "Player1";
             }
             //pass this to the gameloop
-            g = new Game(END_GAME,NUM_OPPONENTS, DIFFICULTY,NAME);
+            g = new Gui(END_GAME,NUM_OPPONENTS, DIFFICULTY,NAME);
             }
         });
         
@@ -225,7 +225,7 @@ public class StartMenuTest extends JFrame {
         frame.setVisible(true);
     }
     public static void main(String[]args){
-        StartMenuTest test = new StartMenuTest();
+        Start test = new Start();
         test.getStartMenu();
     }
 

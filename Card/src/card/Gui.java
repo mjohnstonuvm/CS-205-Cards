@@ -22,7 +22,7 @@ import javax.swing.Timer;
 /**
  * Class to represent card game as a UI
  */
-public final class GuiClassTest {
+public final class Gui {
 
     //variables
     private JMenu fileMenu, helpMenu;
@@ -38,6 +38,7 @@ public final class GuiClassTest {
     private Timer timer;
     private JLabel youLabel, opponent1Label, opponent2Label, opponent3Label;
     private boolean drawnCardUsed = false;
+    protected Game game;
     protected GameData data;
     protected Deck deck;
     protected DiscardPile dp;
@@ -48,12 +49,14 @@ public final class GuiClassTest {
     /*
      Constructor to assign GameData 
      */
-    public GuiClassTest(GameData data) {
+    public Gui(String endCondition, int numOfAI, String difficulty, String playerName) {
         this.gamePanel = new JPanel();
         this.mainFrame = new JFrame();
         this.helpMenu = new JMenu("Help");
         this.fileMenu = new JMenu("File");
-        this.data = data;
+        game = new Game(endCondition, numOfAI, difficulty, playerName);
+        data = game.data;
+        userInitialPeek();
     }
     /*
      Creates facedown cards on the game panel
@@ -156,7 +159,7 @@ public final class GuiClassTest {
      method that lets the user peek at their 2 outer cards 
      */
 
-    public void userInitialPeek(GameData data) {
+    public void userInitialPeek() {
         this.data = data;
         //deck or discard pile prompt
         String[] optionValues = new String[]{"Ok"};
@@ -211,7 +214,7 @@ public final class GuiClassTest {
         //pauses the game for a certain # of seconds
         //data is defined in waitTimer method
 
-        
+
 
     }// End of userTurn()
 
