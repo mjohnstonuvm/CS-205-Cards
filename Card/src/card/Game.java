@@ -78,6 +78,8 @@ public class Game {
     if (endCondition == "Number of Rounds") {
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
+            System.out.println(data.hands.get(0));
+            System.out.println(data.hands.get(1));
             for (int i = 0; i < data.hands.size(); i++) {
                 System.out.println("iterator is" + i);
                 if(i == 0){
@@ -104,7 +106,7 @@ public class Game {
         scores = calculateScores();
 
         for (int i = 1; i < scores.length; i++) {
-            if (scores[i] > scores[0]) {
+            if (scores[i] < scores[0]) {
                 win = false;
             }
         }
@@ -119,7 +121,7 @@ public class Game {
 
         AI oppAI = ai.get(oppNum-1);
         boolean drawDecision;
-        Hand oppHand = data.hands.get(oppNum-1);
+        Hand oppHand = data.hands.get(oppNum);
         int[] result;
         String fileName = "";
         Card selectedCard = data.dp.peek(); //peeks discard pile
@@ -199,25 +201,28 @@ public class Game {
 
     protected int[] calculateScores() {
 
-        Card popped;
+        Card card;
         Hand hand;
         int[] scores = new int[data.hands.size()];
 
         for (int i = 0; i < data.hands.size(); i++) {
 
             hand = data.hands.get(i);
-
+            System.out.println(hand);
             // Calculate score for hand
             for (int j = 0; j < 4; j++) {
-                popped = hand.peek(j);
+                card = hand.peek(j);
                 // Replace power card in hand with number card
                 // as per the official rules
-                while (popped.getType() != Card.Type.NUMBER) {
-                    data.dp.push(hand.swap(data.deckPop(), j));
-                    System.out.println("Pushed a card to discard pile");
-                    System.out.println("Discard pile is now size:" + data.dp.size());
+
+                if(card.getType() != Card.Type.NUMBER) {
+                    while (card.getType() != Card.Type.NUMBER) {
+                        card = data.deckPop();
+                    }
+                    card = hand.swap(card, j);
+
                 }
-                System.out.println("popped:" popped.getNumber());
+                
 
             }
             scores[i] = hand.total();

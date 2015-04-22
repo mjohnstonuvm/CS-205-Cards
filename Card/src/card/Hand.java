@@ -44,9 +44,13 @@ public class Hand {
         */
         public int total() {
             int total = this.cards[0].getNumber();
+            System.out.println(total);
             total += this.cards[1].getNumber();
+            System.out.println(total);
             total += this.cards[2].getNumber();
+            System.out.println(total);
             total += this.cards[3].getNumber();
+            System.out.println(total);
             return total;
         }
 

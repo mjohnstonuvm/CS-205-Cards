@@ -19,7 +19,7 @@ public class MediumAI extends AI {
         numPlayers = players;
         hands = handsin;
         playernum = player;
-        Hand h  = handsin.get(player);
+        Hand h  = handsin.get(player+1);
        ownhand[0] = h.peek(0).getNumber();
        ownhand[1] = h.peek(1).getNumber();
        ownhand[2] = h.peek(2).getNumber();
