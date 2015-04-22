@@ -14,12 +14,13 @@ public class DiscardPile  {
     creating the stack
     */
    Stack<Card> discardPile = new Stack();
- 
+  int size = 0;
    /*
    method for adding a card to the discard pile
    */
    public void push(Card cardDropped){
       discardPile.push(cardDropped);
+      size++;
    }
    
    /*
@@ -33,6 +34,7 @@ public class DiscardPile  {
       }
       else {
         popped = discardPile.pop();
+        size--;
       }
 
       return popped;
@@ -45,7 +47,10 @@ public class DiscardPile  {
       Card peekAt = discardPile.peek();
       return peekAt;
    }
-   
+
+   public int size() {
+    return size;
+   }
    /*
    testing
    */

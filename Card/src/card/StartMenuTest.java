@@ -87,10 +87,13 @@ public class StartMenuTest extends JFrame {
                 NUM_OPPONENTS = 1;
             }
             if(END_GAME == null){
-                END_GAME = "Time";
+                END_GAME = "Number of Rounds";
             }
             if(NAME == null){
                 NAME = "Player1";
+            }
+            if (DIFFICULTY == null) {
+                DIFFICULTY = "Easy";
             }
             //pass this to the gameloop
             g = new Game(END_GAME,NUM_OPPONENTS, DIFFICULTY,NAME);
@@ -137,6 +140,7 @@ public class StartMenuTest extends JFrame {
         difficulty.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent d) {
                 DIFFICULTY = difficulty.getSelectedItem().toString();
+                System.out.println("Difficulty:" + difficulty.getSelectedItem().toString());
             }
         });
         startFrame.add(difficulty);

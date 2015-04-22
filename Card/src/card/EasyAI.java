@@ -10,6 +10,7 @@ public class EasyAI extends AI{
 
     public static Random rand;
     private int player;
+    private boolean mustuse = false;
 
     public EasyAI(int players, int play) {
         super(players);
@@ -22,7 +23,9 @@ public class EasyAI extends AI{
         //true means Draw pile false means discard pile
         int b = rand.nextInt(2);
         if (b == 0 && dis.getType() == Card.Type.NUMBER) {
+            mustuse = true;
             return false;
+            
 
         } else {
             return true;
@@ -39,6 +42,10 @@ public class EasyAI extends AI{
         int[] a = {};
         if (drawnCard.getType() == Card.Type.NUMBER) {
             int c = rand.nextInt(2); // first part of the array is if it should be discarded or put into the hand
+            if (mustuse) {
+                c= 1;
+                mustuse = false;
+            }
             a = new int[]{c, rand.nextInt(4)}; //second part of the array is which hand part it should be put in
             return a;
 
@@ -59,6 +66,9 @@ public class EasyAI extends AI{
                 d = rand.nextInt(numPlayers);
             }
             a = new int[]{c, rand.nextInt(4), d, rand.nextInt(4)}; //second part of the array is the card that the player has that will be swapped, the third part is the "destination" of that card
+            return a;
+        } else if (drawnCard.getType() == Card.Type.DRAW2) {
+            a = new int[]{4};
             return a;
         }
         return a;

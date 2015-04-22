@@ -36,10 +36,10 @@ public class Deck {
         topOfDeck = 0;
 
         while (!dp.discardPile.isEmpty()) {
+            System.out.println("New card being added");
             deck[topOfDeck] = dp.pop();
             topOfDeck++;
         }
-
         shuffle();
     }
 
@@ -47,11 +47,15 @@ public class Deck {
         Card popped = null;
 
         if (topOfDeck >= 0) {
-            popped = deck[topOfDeck];
-            deck[topOfDeck] = null;
-            topOfDeck--;
+            while(popped == null) { //in case of null card just skip it  I don't think this situation occurs but just in case
+                popped = deck[topOfDeck];
+                deck[topOfDeck] = null;
+                System.out.println("topOfDeck is " + topOfDeck);
+                topOfDeck--;
+            }
         } else {
             System.out.println("Deck Pop: card could not be removed, out of bounds.");
+            System.out.println("topOfDeck is " + topOfDeck);
         }
 
         return popped;
@@ -64,6 +68,7 @@ public class Deck {
             deck[topOfDeck] = pushed;
         } else {
             System.out.println("Deck Push: card could not be added, out of bounds.");
+            System.out.println("topOfDeck is " + topOfDeck);
         }
     }// End of push()
 

@@ -32,7 +32,7 @@ public class Game {
             hands.add(new Hand(deck.pop(), deck.pop(), deck.pop(), deck.pop()));
 
         }
-
+        System.out.println("difficult:" + difficulty);
         for (int i = 0; i < numOfAI; i++) {
             if (difficulty == "Easy") {
                 ai.add(new EasyAI(numOfAI, i));
@@ -71,22 +71,35 @@ public class Game {
         // Forces user to look at their two outer cards before game begins
         gui.userInitialPeek(data);
         //passes the game data to gui for user's turn
-        gui.userTurn();   
+        //gui.userTurn();  
+        //gui.method; 
         
         // GAME LOOP
+    if (endCondition == "Number of Rounds") {
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
-
+                System.out.println("iterator is" + i);
                 if(i == 0){
-                    data = gui.method();    
+                    gui.userTurn();
+                    data = gui.method(data);    
                 }else{
 
                     opponentTurn(i);
+                    try{
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        return;
+                    }
                 }
             }
             roundCount++;
         }
+    } else if (endCondition == "Time") {
+
+    } else if (endCondition =="Number of Points") {
+
+    }
 
         scores = calculateScores();
 
@@ -97,32 +110,38 @@ public class Game {
         }
 
         // End game statistics screen
-        //endScreen = new EndGame(playerName, difficulty, scores[0], win);
+        gui.close();
+        EndGame endScreen = new EndGame(playerName, difficulty, scores, win);
+        endScreen.getEndGame();
     }// End of run()
 
-    protected void opponentTurn(int oppNum) {
+    protected boolean opponentTurn(int oppNum) {
 
         AI oppAI = ai.get(oppNum-1);
         boolean drawDecision;
         Hand oppHand = data.hands.get(oppNum-1);
         int[] result;
         String fileName = "";
-        Card selectedCard = data.dp.pop(); //draws from discard pile
-
+        Card selectedCard = data.dp.peek(); //peeks discard pile
+        boolean usedCard = true;
+        
         oppAI.update(data.hands);
         drawDecision = oppAI.drawOrDiscard(selectedCard); //returns action
 
         if (drawDecision) {
             selectedCard = data.deckPop();
-            while (selectedCard.getType() == Card.Type.DRAW2) {
+            /*while (selectedCard.getType() == Card.Type.DRAW2) { //The AI always use Draw 2 cards
                 data.dp.push(selectedCard);
+                System.out.println("Pushed a card to discard pile");               
                 selectedCard = data.deckPop();
-            }
+                drawTwice = true;
+            }*/
             result = oppAI.cardDraw(selectedCard);
         } else {
+            selectedCard = data.dp.pop();
             result = oppAI.cardDraw(selectedCard);
         }
-
+        System.out.println("result[0]= " + result[0]);
         /*
          update model with result and selectedCard
          produce fileNames to send to gui
@@ -131,12 +150,23 @@ public class Game {
          */
         if (result[0] == 0 || result[0] == 2) {
             data.dp.push(selectedCard);
+            System.out.println("Pushed a card to discard pile");
+            System.out.println("Discard pile is now size:" + data.dp.size());
             fileName = selectedCard.getCard();
+            if (result[0]== 0) {
+                usedCard = false;
+            }
+            data.hands.set(oppNum, oppHand);// Update opponent hand after turn is complete
+            gui.opponentTurn(fileName);// Update gui with changes made during turn
         } // result[0] == 1: when the AI wants to exchange a card in its hand with the one drawn
         else if (result[0] == 1) {
             Card toDiscard = oppHand.swap(selectedCard, result[1]);
             data.dp.push(toDiscard);
+            System.out.println("Pushed a card to discard pile");
+            System.out.println("Discard pile is now size:" + data.dp.size());
             fileName = toDiscard.getCard();
+            data.hands.set(oppNum, oppHand);// Update opponent hand after turn is complete
+            gui.opponentTurn(fileName);// Update gui with changes made during turn
         } // result[0] == 3: when the AI uses a swap card to swap cards with another player
         else if (result[0] == 3) {
             // Swap cards between opponent and other player
@@ -147,17 +177,24 @@ public class Game {
             // Update the hand that the opponent swapped cards with
             data.hands.set(result[2], otherHand);
             fileName = selectedCard.getCard();
+            data.hands.set(oppNum, oppHand);// Update opponent hand after turn is complete
+            gui.opponentTurn(fileName);// Update gui with changes made during turn
         } // else, say an error occurred
+        else if (result[0] == 4) { //Draw 2 loops around
+            if(!opponentTurn(oppNum)) {//if the card that is drawn again is not used, then draw another card
+                opponentTurn(oppNum);//draw another card
+            }
+        }
         else {
             System.out.println("Game.java Error: AI result not in the correct format "
                     + "result[0] should be an int from 0 to 3");
         }
 
-        // Update opponent hand after turn is complete
-        data.hands.set(oppNum, oppHand);
-        // Update gui with changes made during turn
-        gui.opponentTurn(fileName);
-
+        
+        
+        
+        
+        return usedCard;
     }// End of opponentTurn()
 
     protected int[] calculateScores() {
@@ -177,7 +214,10 @@ public class Game {
                 // as per the official rules
                 while (popped.getType() != Card.Type.NUMBER) {
                     data.dp.push(hand.swap(data.deckPop(), j));
+                    System.out.println("Pushed a card to discard pile");
+                    System.out.println("Discard pile is now size:" + data.dp.size());
                 }
+                System.out.println("popped:" popped.getNumber());
 
             }
             scores[i] = hand.total();

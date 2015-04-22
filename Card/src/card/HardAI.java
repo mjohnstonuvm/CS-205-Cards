@@ -118,6 +118,9 @@ public class HardAI extends AI {
             a = new int[] {3, highestindex, lowestplayer, lowestindex};
             return a;
 
+        } else if (drawnCard.getType() == Card.Type.DRAW2) {
+            a = new int[]{4};
+            return a;
         }
         return a;
 

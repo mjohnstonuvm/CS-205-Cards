@@ -124,6 +124,9 @@ public class MediumAI extends AI {
             hand[highestindex] = 5;
             return a;
 
+        } else if (drawnCard.getType() == Card.Type.DRAW2) {
+            a = new int[]{4};
+            return a;
         }
         return a;
 

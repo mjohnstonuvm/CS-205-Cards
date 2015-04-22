@@ -44,6 +44,7 @@ public final class GuiClassTest {
     protected String playerName;
     protected ArrayList<Hand> hands;
     protected int numOfAI, result;
+    private boolean cardUsed;
 
     /*
      Constructor to assign GameData 
@@ -58,7 +59,9 @@ public final class GuiClassTest {
     /*
      Creates facedown cards on the game panel
      */
-
+     public void close() {
+        mainFrame.dispose();
+     }
     public void createCards(int numOfAI, DiscardPile dp) {
         this.numOfAI = numOfAI;
         //sets window states
@@ -200,26 +203,39 @@ public final class GuiClassTest {
     public void userTurn() {
 
         //deck or discard pile prompt
-        String[] optionValues = new String[]{"Draw from Deck", "Draw from Discard Pile"};
-        Object selectedValue = JOptionPane.showOptionDialog(null, data.playerName
-                + ", do you want to draw from the DECK or DISCARD Pile?", "DRAW", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null,
-                optionValues, optionValues[0]);
+        Card discrd = data.dp.peek();
+        if (discrd.getType() == Card.Type.NUMBER) {      
+            String[] optionValues = new String[]{"Draw from Deck", "Draw from Discard Pile"};
+            Object selectedValue = JOptionPane.showOptionDialog(null, data.playerName
+                    + ", do you want to draw from the DECK or DISCARD Pile?", "DRAW", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null,
+                    optionValues, optionValues[0]);
         //result value -- option selected
-        result = (Integer) selectedValue;
-        method();
+            result = (Integer) selectedValue;
+        } else {
+             String[] optionValues = new String[]{"Draw from Deck"};
+            Object selectedValue = JOptionPane.showOptionDialog(null, data.playerName
+                    + ", you must draw from the Deck, as the top card of the Discard pile is a power card.", "DRAW", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null,
+                    optionValues, optionValues[0]);
+        //result value -- option selected
+            result = (Integer) selectedValue;
+        }
         //pauses the game for a certain # of seconds
         //data is defined in waitTimer method
 
     }// End of userTurn()
 
-    public GameData method() {
+    public GameData method(GameData data2) {
+        data = data2;
+
         //IF DRAW FROM DECK IS CHOSEN
+        System.out.println("Result is" + result);
         if (result == 0) {
-            deckPic.setEnabled(true); //sets deck to enabled  
+            /*deckPic.setEnabled(true); //sets deck to enabled  
             //deck listener that performs a different action depending on type of card
             deckPic.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(ActionEvent e) {*/
                     //pop card from the deck
                     Card deckCard = data.deckPop();
                     //gets icon of the drawn card
@@ -288,7 +304,7 @@ public final class GuiClassTest {
                         //if the user chose to draw 2 more cards
                         if ((Integer) selectedValue == 1) {
                             //passes the swap card to be discarded as first param
-                            draw2(deckCard);
+                            data = draw2(deckCard);
                         } else {
                             //user decides to discard the draw 2 card, goes to discard pile 
                             cardToDiscard = deckCard;
@@ -332,14 +348,17 @@ public final class GuiClassTest {
                         JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
                         discardPanel.removeAll();
                         discardPanel.add(discardCard);
+                        data.dp.push(cardToDiscard);
+                        System.out.println("Pushed a card to discard pile");
+                        System.out.println("Discard pile is now size:" + data.dp.size());
                         AddToDiscard = false;
                     }
                     discardPanel.revalidate();
                     deckPic.setEnabled(false); //sets deck to disabled
                     discardPic.setEnabled(false); //sets discard to disabled
 
-                }
-            }); //action listener for deck pic
+                //}
+           // }); //action listener for deck pic
 
             //DRAW FROM DISCARD IS CHOSEN
         } else {
@@ -347,8 +366,8 @@ public final class GuiClassTest {
             //action listener that performs a swap with a card from the user hand
             //with the discard pile card.
             //card from hand is discarded
-            discardPic.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+           /* discardPic.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {*/
                     cardInDiscardPile = data.dp.pop(); //takes from discard pile
                     //prompt user, "Click on one of your cards to swap with"
                     JOptionPane.showMessageDialog(gamePanel, "Click on one of your cards to swap this card with",
@@ -362,13 +381,16 @@ public final class GuiClassTest {
                         JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
                         discardPanel.removeAll();
                         discardPanel.add(discardCard);
+                        data.dp.push(cardToDiscard);
+                        System.out.println("Pushed a card to discard pile");
+                        System.out.println("Discard pile is now size:" + data.dp.size());
                         AddToDiscard = false;
                     }
                     discardPanel.revalidate();
                     discardPic.setEnabled(false); //sets discard to disabled
-                }
+                //}
 
-            }); //action listener for discard pic
+           //}); //action listener for discard pic
 
         }//end else
         waitTimer();
@@ -381,60 +403,80 @@ public final class GuiClassTest {
     public void swapWithYourHand(Card cardToSwapIn) {
         //loop through user buttons to set them to clickable/enabled
         //user buttons are index  0 - 3
-        for (int i = 0; i < 4; i++) {
+        //for (int i = 0; i < 4; i++) {
             //sets buttons to enabled
-            ButtonsArray[i].setEnabled(true);
+           // ButtonsArray[i].setEnabled(true);
             //saves the index so it can be accessed in the aciton listener
-            int index = i;
+           //int index = i;
             //action listener for each enabled button
-            ButtonsArray[i].addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+           // ButtonsArray[i].addActionListener(new ActionListener() {
+               // public void actionPerformed(ActionEvent e) {
                     //swap function from Hand.Java returns the card that is being discarded
                     //hands.get(0) is the users hand
                     //saves the card into the global variable cardToDiscard
                     //it can be accessed in the UserTurn function
-                    Card cardToDiscard = data.hands.get(0).swap(cardToSwapIn, index);
+            String[] optionValues = new String[]{"Card 1", "Card 2", "Card 3", "Card 4"};
+             ImageIcon icon = new ImageIcon(cardToSwapIn.getCard());
+             int selectedValue = JOptionPane.showOptionDialog(null, "Which card in your hand would you like to swap out", "SWAP CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+                    Card cardToDiscard = data.hands.get(0).swap(cardToSwapIn, selectedValue);
                     //creates a discarded card from the cardTodiscard given from each function
                     JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
                     discardPanel.removeAll();
                     discardPanel.add(discardCard);
+                    data.dp.push(cardToDiscard);
+                        System.out.println("Pushed a card to discard pile");
+                        System.out.println("Discard pile is now size:" + data.dp.size());
                     discardPanel.revalidate();
                     //sets all the buttons to diabled
-                    for (int i = 0; i < 4; i++) {
+                   //for (int i = 0; i < 4; i++) {
                         //sets buttons to enabled
-                        ButtonsArray[i].setEnabled(false);
-                    }
+                       // ButtonsArray[i].setEnabled(false);
+                   // }
 
-                }
-            }); //end of action listener
-        }// end of for loop
+                //}
+            //}); //end of action listener
+       // }// end of for loop
 
     } //end of swapFromDiscardPile
 
     /*
      Method to perform peek on your OWN hand
      */
-    public void peek(Card cardToDiscard) {
+    public void peek(Card peekCard) {
         //loop through user buttons to set them to clickable/enabled
         //user buttons are index  0 - 3
-        for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
             //sets buttons to enabled
             ButtonsArray[i].setEnabled(true);
             //saves the index so it can be accessed in the aciton listener
             final int index = i;
             //action listener for each enabled button
             ButtonsArray[i].addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    //hands.get(0) is the users hand
-                    Card cardToPeek = data.hands.get(0).peek(index);
+                public void actionPerformed(ActionEvent e) {*/
+                    //hands.get(0) is the users handString[] 
+                    String [] optionValues = new String[]{"Card 1", "Card 2", "Card 3", "Card 4"};
+             ImageIcon icon = new ImageIcon(peekCard.getCard());
+             int selectedValue = JOptionPane.showOptionDialog(null, "Which card in your hand would you like to peek at", "SWAP CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+                    Card cardToPeek = data.hands.get(0).peek(selectedValue);
+                    //creates a discarded card from the cardTodiscard given from each function
+                    /*JButton discardCard = new JButton(new ImageIcon(cardToDiscard.getCard()));
+                    discardPanel.removeAll();
+                    discardPanel.add(discardCard);
+                    data.dp.push(cardToDiscard);
+                        System.out.println("Pushed a card to discard pile");
+                    discardPanel.revalidate();*/
                     //new constraint
                     GridBagConstraints gbs = new GridBagConstraints();
                     //x constraint 0 - 3
-                    gbs.gridx = index;
+                    gbs.gridx = selectedValue;
                     //creates a new button of the peek card
                     cardToShow = new JButton(new ImageIcon(cardToPeek.getCard()));
                     //hide facedown card
-                    ButtonsArray[index].setVisible(false);
+                    ButtonsArray[selectedValue].setVisible(false);
                     //sets the location of the new card to show to the user panel
                     cardToShow.setLocation(new Point(gbs.gridx, 0));
                     //add the card to panel
@@ -446,10 +488,10 @@ public final class GuiClassTest {
                     timer.setRepeats(false);
                     timer.start();
                     AddToDiscard = false;
-                }
-            }); //end of action listener
+                //}
+           /* }); //end of action listener
 
-        }// end of for loop
+        }// end of for loop*/
 
     }//END PEEK FUNCTION
 
@@ -476,7 +518,7 @@ public final class GuiClassTest {
     public void swapWithOpponent(int selectedOpponent) {
         //loop through user buttons to set them to clickable/enabled
         //user buttons are index  0 - 3
-        for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
             //sets buttons to enabled
             ButtonsArray[i].setEnabled(true);
             //saves the index so it can be accessed in the aciton listener
@@ -484,18 +526,24 @@ public final class GuiClassTest {
             //action listener for each enabled button
             ButtonsArray[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    //hands.get(0) is the users hand
-                    Card userCardToSwap = data.hands.get(0).peek(userCardIndex);
-                    swapComplete(userCardToSwap, userCardIndex, selectedOpponent);
+                    //hands.get(0) is the users hand*/
+                    String [] optionValues = new String[]{"Card 1", "Card 2", "Card 3", "Card 4"};
+             ImageIcon icon = new ImageIcon("deck.png");
+             int selectedValue1 = JOptionPane.showOptionDialog(null, "Which card in your hand would you like to swap away", "SWAP CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+            
+                    Card userCardToSwap = data.hands.get(0).peek(selectedValue1);
+                    swapComplete(userCardToSwap, selectedValue1, selectedOpponent);
                     //sets all the buttons to diabled
-                    for (int i = 0; i < 4; i++) {
+                   /* for (int i = 0; i < 4; i++) {
                         //sets buttons to enabled
                         ButtonsArray[i].setEnabled(false);
                     }
                     AddToDiscard = false;
                 }
             });
-        }
+        }*/
 
     } //end swapWithOpponent function
 
@@ -517,7 +565,15 @@ public final class GuiClassTest {
             lastOpponentCard = 15;
         }
         //loop through opponents buttons
-        for (int i = lastOpponentCard - 3; i < lastOpponentCard; i++) {
+       String[] optionValues = new String[]{"Card 1", "Card 2", "Card 3", "Card 4"};
+            ImageIcon icon = new ImageIcon("deck.png");
+             int selectedValue2 = JOptionPane.showOptionDialog(null, "Which card in your opponent's hand would you like to take?", "SWAP CARD", JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, icon,
+                                optionValues, optionValues[0]);
+             Card cardToGiveUser = data.hands.get(selectedOpponent).swap(userCardToSwap, selectedValue2);
+                    //swaps to the user hand
+                    data.hands.get(0).swap(cardToGiveUser, userCardIndex);
+        /*for (int i = lastOpponentCard - 3; i < lastOpponentCard; i++) {
             //sets buttons to enabled
             ButtonsArray[i].setEnabled(true);
             //saves the index so it can be accessed in the action listener
@@ -538,7 +594,7 @@ public final class GuiClassTest {
                 }
             }); //end of action listener
 
-        }// end of for loop
+        }*/// end of for loop
 
     }//END OF SwapComplete function
 
@@ -546,20 +602,29 @@ public final class GuiClassTest {
      This method perfoms the draw 2 function passes in the draw 2 
      card to be discarded as param, and array of cards
      */
-    public void draw2(Card cardDiscarded) {
+    public GameData draw2(Card cardDiscarded) {
         //uses draw 2 function to draw 2 more cards
         //discard the drawn draw 2 card
         JButton discardCard = new JButton(new ImageIcon(cardDiscarded.getCard()));
         discardPanel.removeAll();
         discardPanel.add(discardCard);
         discardPanel.revalidate();
+        data.dp.push(cardDiscarded);
+        drawnCardUsed = false;
 
+        result = 0;
+        GameData temp = method(data);
+        if (drawnCardUsed == false) {
+            return method(data);
+        } else {
+            return temp;
+        }
         //while drawnCard is not used
-        while (drawnCardUsed == false) {
+       // while (drawnCardUsed == false) {
             //set the deck to clickable 
-            deckPic.setEnabled(true);
+           // deckPic.setEnabled(true);
 
-        }//end while loop
+        //}//end while loop
     }//end DRAW 2 FUNCTION
 
     /*
