@@ -62,6 +62,7 @@ public class Deck {
         if (topOfDeck < 53 && topOfDeck >= -1) {
             topOfDeck++;
             deck[topOfDeck] = pushed;
+            shuffle();
         } else {
             System.out.println("Deck Push: card could not be added, out of bounds.");
         }

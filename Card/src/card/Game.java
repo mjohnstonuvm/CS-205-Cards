@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Game {
 
-    protected ArrayList<AI> ai = new ArrayList<>();
+    protected ArrayList<Player> players = new ArrayList<>();
     protected GameData data;
     protected GuiClassTest gui;
     protected String endCondition, difficulty, playerName;
@@ -37,16 +37,6 @@ public class Game {
 
         }
 
-        for (int i = 0; i < numOfAI; i++) {
-            if (difficulty == "Easy") {
-                ai.add(new EasyAI(numOfAI, i));
-            } else if (difficulty == "Medium") {
-                ai.add(new MediumAI(numOfAI, hands, i));
-            } else {
-                ai.add(new HardAI(numOfAI, hands, i));
-            }
-        }
-
         //pops a card from the deck
         dpTop = deck.pop();
 
@@ -59,111 +49,24 @@ public class Game {
         //add to discard pile
         dp.push(dpTop);
         data = new GameData(deck, dp, hands, playerName, numOfAI);
-        gui = new GuiClassTest(data);
-        //creates gui card layout
-        gui.createCards(numOfAI, dp);
 
-        run();
+        players.add(new Player());
+
+        for (int i = 0; i < numOfAI; i++) {
+            if (difficulty == "Easy") {
+                players.add(new Player(new AI(new EasyAI(numOfAI, i))));
+            } else if (difficulty == "Medium") {
+                players.add(new Player(new AI(new MediumAI(numOfAI, hands, i))));
+            } else {
+                players.add(new Player(new AI(new HardAI(numOfAI, hands, i))));
+            }
+        }
+
+        turn();
 
     }// End of Game constructor
 
-    public void run() {
-        boolean win = true;
-        int[] scores;
-        //EndGame endScreen;
-
-        // Forces user to look at their two outer cards before game begins
-        gui.userInitialPeek(data);
-        //passes the game data to gui for user's turn
-        gui.userTurn();   
-        
-        // GAME LOOP
-        while (roundCount < 10) {
-            System.out.println("Round " + roundCount);
-            for (int i = 0; i < data.hands.size(); i++) {
-                if(i == 0){
-                    data = gui.method();    
-                }
-                else{
-                    opponentTurn(i);
-                }
-            }
-            roundCount++;
-        }
-
-        scores = calculateScores();
-
-        for (int i = 1; i < scores.length; i++) {
-            if (scores[i] > scores[0]) {
-                win = false;
-            }
-        }
-
-        // End game statistics screen
-        //endScreen = new EndGame(playerName, difficulty, scores[0], win);
-    }// End of run()
-
-    protected void opponentTurn(int oppNum) {
-
-        AI oppAI = ai.get(oppNum-1);
-        boolean drawDecision;
-        Hand oppHand = data.hands.get(oppNum-1);
-        int[] result;
-        String fileName = "";
-        Card selectedCard = data.dp.pop(); //draws from discard pile
-
-        oppAI.update(data.hands);
-        drawDecision = oppAI.drawOrDiscard(selectedCard); //returns action
-
-        if (drawDecision) {
-            selectedCard = data.deckPop();
-            while (selectedCard.getType() == Card.Type.DRAW2) {
-                data.dp.push(selectedCard);
-                selectedCard = data.deckPop();
-            }
-            result = oppAI.cardDraw(selectedCard);
-        } else {
-            result = oppAI.cardDraw(selectedCard);
-        }
-
-        /*
-         update model with result and selectedCard
-         produce fileNames to send to gui
-         result[0] == 0: when the AI wants to discard the card that was drawn
-         result[0] == 2: when the AI wants uses a peek card, effectly does nothing
-         */
-        if (result[0] == 0 || result[0] == 2) {
-            data.dp.push(selectedCard);
-            fileName = selectedCard.getCard();
-        } // result[0] == 1: when the AI wants to exchange a card in its hand with the one drawn
-        else if (result[0] == 1) {
-            Card toDiscard = oppHand.swap(selectedCard, result[1]);
-            data.dp.push(toDiscard);
-            fileName = toDiscard.getCard();
-        } // result[0] == 3: when the AI uses a swap card to swap cards with another player
-        else if (result[0] == 3) {
-            // Swap cards between opponent and other player
-            Hand otherHand = data.hands.get(result[2]);
-            Card otherCard = otherHand.swap(oppHand.peek(result[1]), result[3]);
-            otherCard = oppHand.swap(otherHand.peek(result[3]), result[1]);
-            otherCard = null;
-            // Update the hand that the opponent swapped cards with
-            data.hands.set(result[2], otherHand);
-            fileName = selectedCard.getCard();
-        } // else, say an error occurred
-        else {
-            System.out.println("Game.java Error: AI result not in the correct format "
-                    + "result[0] should be an int from 0 to 3");
-        }
-
-        // Update opponent hand after turn is complete
-        data.hands.set(oppNum, oppHand);
-        // Update gui with changes made during turn
-        gui.opponentTurn(fileName);
-
-    }// End of opponentTurn()
-
-    protected int[] calculateScores() {
+    public void endGame() {
 
         Card card;
         Hand hand;
@@ -189,8 +92,32 @@ public class Game {
             scores[i] = hand.total();
         }
 
-        return scores;
+        for (int i = 1; i < scores.length; i++) {
+            if (scores[i] > scores[0]) {
+                win = false;
+            }
+        }
 
-    }// End of calculateScores()
+        // End game statistics screen
+        //endScreen = new EndGame(playerName, difficulty, scores[0], win);
+
+    }// End of endGame()
+
+    public void endTurn() {
+        currentPlayer = players.get((playerIndex + 1) % player.size());
+        if (endCondition) {
+            endGame();
+        }
+        else {
+            turn();
+        }
+    }// End of endTurn()
+
+    public void turn() {
+        data = currentPlayer.run(data, playerIndex);
+        if (!currentPlayer.isHuman) {
+            endTurn();
+        }
+    }// End of turn()
 
 }// End of Game Class

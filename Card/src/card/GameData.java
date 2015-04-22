@@ -31,6 +31,11 @@ public class GameData {
         if (popped == null) {
             deck = new Deck(dp);
             dp = new DiscardPile();
+            popped = deck.pop();
+            while (popped.getType() != Card.Type.NUMBER) {
+                deck.push(popped);
+                popped = deck.pop();
+            }
             dp.push(deck.pop());
             popped = deck.pop();
         }
