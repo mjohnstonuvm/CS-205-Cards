@@ -162,7 +162,7 @@ public class Game {
 
     protected int[] calculateScores() {
 
-        Card popped;
+        Card card;
         Hand hand;
         int[] scores = new int[data.hands.size()];
 
@@ -172,11 +172,14 @@ public class Game {
 
             // Calculate score for hand
             for (int j = 0; j < 4; j++) {
-                popped = hand.peek(j);
+                card = hand.peek(j);
                 // Replace power card in hand with number card
                 // as per the official rules
-                while (popped.getType() != Card.Type.NUMBER) {
-                    data.dp.push(hand.swap(data.deckPop(), j));
+                if(card.getType != Card.Type.NUMBER) {
+                    while (card.getType() != Card.Type.NUMBER) {
+                        card = data.deckPop();
+                    }
+                    card = hand.swap(card, j);
                 }
 
             }
