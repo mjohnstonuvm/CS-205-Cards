@@ -1,3 +1,7 @@
+/**********************************
+        CALLBACK VERISON
+**********************************/
+
 package card;
 
 import java.util.ArrayList;
@@ -77,11 +81,10 @@ public class Game {
         while (roundCount < 10) {
             System.out.println("Round " + roundCount);
             for (int i = 0; i < data.hands.size(); i++) {
-
                 if(i == 0){
                     data = gui.method();    
-                }else{
-
+                }
+                else{
                     opponentTurn(i);
                 }
             }
